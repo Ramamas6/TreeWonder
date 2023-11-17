@@ -1,0 +1,30 @@
+package com.example.treewonder
+
+data class Tree(
+    val id: Int,
+    val name: String,
+    val commonName: String,
+    val botanicName: String,
+    val height: Int,
+    val circumference: Int,
+    val developmentStage: String,
+    val plantationYear: Int,
+    val outstandingQualification: String,
+    val summary: String,
+    val description: String,
+    val type: String,
+    val species: String,
+    val variety: String,
+    val taxonomicAuthority: String,
+    val sign: String,
+    val picture: String,
+    val longitude: Double,
+    val latitude: Double,
+    val city: String,
+    val site: String,
+    val address: String,
+    val domanialite: String,
+    val numDelib: String,
+    val dateDelib: String,
+    val copyright: String
+)
