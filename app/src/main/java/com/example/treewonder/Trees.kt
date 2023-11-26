@@ -11,9 +11,9 @@ class Trees {
         return storage[name] ?: throw IllegalAccessException("Unknown name")
     }
 
-    fun getAllTrees():List<Tree>{
-        return storage.values
-            .sortedBy { tree: Tree -> tree.name }
+    fun getAllTrees(): ArrayList<Tree> {
+        return ArrayList(storage.values
+            .sortedBy { tree: Tree -> tree.name })
     }
 
 }

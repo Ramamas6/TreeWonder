@@ -24,6 +24,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
+
+    private val trees = Trees()
+
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
 
@@ -34,16 +37,22 @@ class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        displayListFragment()
+
         floatingActionButton.setOnClickListener{
             displayCreatedTreeFragment()
         }
 
-        val mapFragment = SupportMapFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.a_main_lyt_fragment, mapFragment)
-            .commit()
-        mapFragment.getMapAsync(this)
+    }
 
+    private fun displayListFragment(){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(
+            R.id.a_main_lyt_fragment,
+            TreeListFragment.newInstance(trees.getAllTrees())
+        )
+        transaction.commit()
+        floatingActionButton.visibility = View.VISIBLE
     }
 
     private fun displayCreatedTreeFragment(){
@@ -108,7 +117,8 @@ class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onTreeCreated(tree: Tree) {
-        TODO("Not yet implemented")
+        trees.addTree(tree)
+        displayListFragment()
     }
 
 }
