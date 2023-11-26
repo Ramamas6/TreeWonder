@@ -1,14 +1,14 @@
 package com.example.treewonder
 
 class Trees {
-    private val storage = HashMap<Int, Tree>()
+    private val storage = HashMap<String, Tree>()
 
     fun addTree(tree: Tree){
-        storage[tree.id] = tree
+        storage[tree.name] = tree
     }
 
-    fun getTree(id: Int): Tree {
-        return storage[id] ?: throw IllegalAccessException("Unknown id")
+    fun getTree(name: String): Tree {
+        return storage[name] ?: throw IllegalAccessException("Unknown name")
     }
 
     fun getAllTrees():List<Tree>{

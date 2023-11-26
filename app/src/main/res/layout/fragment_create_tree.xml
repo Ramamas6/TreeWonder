@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_name"
+        android:layout_width="245dp"
+        android:layout_height="60dp"
+        android:hint="Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07" />
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_common_name"
+        android:layout_width="245dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:hint="Common name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_name" />
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_botanic_name"
+        android:layout_width="245dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:hint="Botanic name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_common_name" />
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_height"
+        android:layout_width="176dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Height"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_circumference"
+        android:layout_width="176dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Circumference"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
+
+
+    <EditText
+        android:id="@+id/f_create_tree_edt_development_stage"
+        android:layout_width="245dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:hint="Development stage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_height" />
+
+    <Button
+        android:id="@+id/f_create_tree_btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

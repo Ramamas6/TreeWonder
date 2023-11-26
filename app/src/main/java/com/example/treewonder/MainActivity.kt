@@ -3,20 +3,14 @@ package com.example.treewonder
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,24 +19,41 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import java.io.Console
-import java.util.Locale
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
+
+    private val floatingActionButton: FloatingActionButton by lazy {
+        findViewById(R.id.a_main_btn_create_tree)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        floatingActionButton.setOnClickListener{
+            displayCreatedTreeFragment()
+        }
+
         val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .add(R.id.a_main_lyt, mapFragment)
+            .add(R.id.a_main_lyt_fragment, mapFragment)
             .commit()
         mapFragment.getMapAsync(this)
 
+    }
+
+    private fun displayCreatedTreeFragment(){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(
+            R.id.a_main_lyt_fragment,
+            CreateTreeFragment()
+        )
+        transaction.commit()
+        floatingActionButton.visibility = View.GONE
     }
 
     override fun onMapReady(map: GoogleMap){
@@ -96,6 +107,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             LocationManager.NETWORK_PROVIDER)
     }
 
-
+    override fun onTreeCreated(tree: Tree) {
+        TODO("Not yet implemented")
+    }
 
 }
