@@ -9,7 +9,6 @@ data class Tree(
     val height: Int,
     val circumference: Int,
     val developmentStage: String,
-    /*
     val plantationYear: Int,
     val outstandingQualification: String,
     val summary: String,
@@ -22,5 +21,4 @@ data class Tree(
     val longitude: Double,
     val latitude: Double,
     val address: String,
-    */
 ): Serializable
