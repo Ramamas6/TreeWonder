@@ -22,5 +22,4 @@ data class Tree(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val addressBis: String,
 ): Serializable

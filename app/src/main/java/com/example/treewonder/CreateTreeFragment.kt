@@ -1,6 +1,6 @@
 package com.example.treewonder
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import java.lang.IllegalStateException
+import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CreateTreeFragment: Fragment() {
 
-    private lateinit var listener: TreeCreator
     private lateinit var edtName: EditText
     private lateinit var edtCommonName: EditText
     private lateinit var edtBotanicName: EditText
@@ -20,7 +20,7 @@ class CreateTreeFragment: Fragment() {
     private lateinit var edtCircumference: EditText
     private lateinit var edtDevelopmentStage: EditText
 
-    private lateinit var btnSave:Button;
+    private lateinit var btnNext: Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savaedInstanceState: Bundle?
@@ -34,36 +34,27 @@ class CreateTreeFragment: Fragment() {
         edtCircumference = view.findViewById(R.id.f_create_tree_edt_circumference)
         edtDevelopmentStage = view.findViewById(R.id.f_create_tree_edt_development_stage)
 
-        btnSave = view.findViewById(R.id.f_create_tree_btn_save)
-        btnSave.setOnClickListener {
-            val name = edtName.text.toString()
-            val commonName = edtCommonName.text.toString()
-            val botanicName = edtBotanicName.text.toString()
-            val height =  Integer.parseInt(edtHeight.text.toString())
-            val circumference = Integer.parseInt(edtCircumference.text.toString())
-            val developmentStage = edtDevelopmentStage.text.toString()
-
-
-            val tree = Tree(0,
-                            name,
-                            commonName,
-                            botanicName,
-                            height,
-                            circumference,
-                            developmentStage,
-                0, "", "", "", "", "", "", "", "", 40.0, 40.0, "", "")
-            this.listener.onTreeCreated(tree)
+        btnNext = view.findViewById(R.id.f_create_tree_btn_next)
+        btnNext.setOnClickListener {
+            val nextFragment = CreateTreeFragment2()
+            val bundle = Bundle()
+            bundle.putString("name", edtName.text.toString())
+            bundle.putString("commonName", edtCommonName.text.toString())
+            bundle.putString("botanicName", edtBotanicName.text.toString())
+            bundle.putInt("height", Integer.parseInt(edtHeight.text.toString()))
+            bundle.putInt("circumference", Integer.parseInt(edtCircumference.text.toString()))
+            bundle.putString("developmentStage", edtDevelopmentStage.text.toString())
+            nextFragment.arguments = bundle
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+            transaction
+                .replace(
+                    R.id.a_main_lyt_fragment,
+                    nextFragment
+                )
+            transaction.commit()
         }
 
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if(context is TreeCreator) {
-            this.listener = context
-        }else{
-            throw IllegalStateException("$context must implement TreeCreator")
-        }
-    }
 }
