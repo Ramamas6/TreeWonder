@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 
-class CreateTreeActivity : AppCompatActivity() {
+class CreateTreeActivity : AppCompatActivity(), TreeCreator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_tree)
@@ -23,4 +23,10 @@ class CreateTreeActivity : AppCompatActivity() {
             )
             val rez = transaction.commit()
         }
+
+    override fun onTreeCreated(tree: Tree) {
+        TODO("Not yet implemented")
+    }
+
+
 }
