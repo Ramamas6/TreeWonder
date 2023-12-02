@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,13 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TreeWonder"
         tools:targetApi="31">
+        <service
+            android:name=".TreeService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB7ZfKvqMSO7alMGTdbiWFlaL2IAD6juiE"
-            />
+            android:value="AIzaSyB7ZfKvqMSO7alMGTdbiWFlaL2IAD6juiE" />
+
         <activity
             android:name=".CreateTreeActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

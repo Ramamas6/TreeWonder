@@ -44,12 +44,14 @@ class CreateTreeFragment: Fragment() {
             val developmentStage = edtDevelopmentStage.text.toString()
 
 
-            val tree = Tree(name,
+            val tree = Tree(0,
+                            name,
                             commonName,
                             botanicName,
                             height,
                             circumference,
-                            developmentStage)
+                            developmentStage,
+                0, "", "", "", "", "", "", "", "", 40.0, 40.0, "", "")
             this.listener.onTreeCreated(tree)
         }
 
