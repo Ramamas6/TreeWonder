@@ -1,108 +1,133 @@
 package com.example.treewonder
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
+
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.widget.Button
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.activity.result.ActivityResult
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-private lateinit var fusedLocationClient: FusedLocationProviderClient
+const val TREE_KEY = "tree-key"
+private const val SERVER_BASE_URL = "https://treewonder.cleverapps.io/"
 
-class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
-
+class MainActivity : AppCompatActivity() {
     private val trees = Trees()
 
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private lateinit var googleMap: GoogleMap
+    private val retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(SERVER_BASE_URL)
+        .build()
+    private val treeService = retrofit.create(TreeService::class.java)
 
-    private val floatingActionButton: FloatingActionButton by lazy {
-        findViewById(R.id.a_main_btn_create_tree)
+    // Needed to send it the result of RequestPermissions for localisation
+    private var mapFragment: MapsFragment = MapsFragment()
+
+    fun getTrees(): ArrayList<Tree> {
+        return trees.getAllTrees()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        displayListFragment()
+        initData()
 
-        floatingActionButton.setOnClickListener{
-            displayCreatedTreeFragment()
+        displayMapFragment()
+
+        val addTreeButton = findViewById<FloatingActionButton>(R.id.a_main_btn_create_tree)
+        addTreeButton.setOnClickListener{
+            val intent = Intent(this, CreateTreeActivity::class.java)
+            this.startForResult.launch(intent)
         }
 
+        val buttonList = findViewById<Button>(R.id.a_main_button_list)
+        buttonList.setOnClickListener{ displayListFragment() }
+
+        val buttonMap = findViewById<Button>(R.id.a_main_button_map)
+        buttonMap.setOnClickListener { displayMapFragment() }
     }
 
+    /**
+     * Display the fragment with list of all trees
+     */
     private fun displayListFragment(){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
-            R.id.a_main_lyt_fragment,
+            R.id.a_main_fragment,
             TreeListFragment.newInstance(trees.getAllTrees())
         )
         transaction.commit()
-        floatingActionButton.visibility = View.VISIBLE
     }
 
-    private fun displayCreatedTreeFragment(){
+    /**
+     * Display the fragment with the map
+     */
+    private fun displayMapFragment(){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
-            R.id.a_main_lyt_fragment,
-            CreateTreeFragment()
+            R.id.a_main_fragment,
+            mapFragment
         )
         transaction.commit()
-        floatingActionButton.visibility = View.GONE
     }
 
-    override fun onMapReady(map: GoogleMap){
-        googleMap = map
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        map.moveCamera(CameraUpdateFactory.zoomTo(14f))
-        getLocation()
-        val paris = LatLng(48.8589384,2.2646343)
-        map.addMarker(MarkerOptions().position(paris).title("Paris").snippet("Default position"))
-    }
-
-    @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (isLocationEnabled()) {
-                mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-                    val location: Location? = task.result
-                    if(location != null) {
-                        val loc = LatLng(location.latitude, location.longitude)
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
+    /**
+     * Get the result of an activity
+     */
+    @Suppress("DEPRECATION")
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val treeCreated = result.data?.getSerializableExtra(TREE_KEY)
+            treeService.createTree(treeCreated as Tree)
+                .enqueue {
+                    onResponse = {
+                        val treeFromServer: Tree? = it.body()
+                        trees.addTree(treeFromServer!!)
+                        displayMapFragment()
+                    }
+                    onFailure = {
+                        Toast.makeText(this@MainActivity, it?.message, Toast.LENGTH_SHORT).show()
                     }
                 }
-            } else {
-                Toast.makeText(this, "Please turn on location", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            requestPermissions()
         }
     }
 
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(this,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            2)
+    /**
+     * Initialize the data when opening the app
+     */
+    private fun initData() {
+        /** Get every tree from the API **/
+        treeService.getAllTrees()
+            .enqueue(object : Callback<List<Tree>> {
+                override fun onResponse(call: Call<List<Tree>>, response: Response<List<Tree>>) {
+                    val allTrees: List<Tree> = response.body()!!
+                    trees.addTrees(allTrees)
+                    mapFragment.displayTrees(trees.getAllTrees())
+                }
+                override fun onFailure(call: Call<List<Tree>>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
+                }
+            })
     }
-    @SuppressLint("MissingSuperCall")
-    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<String>,grantResults: IntArray) {
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        /** Localisation permission **/
         if (requestCode == 2) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                getLocation()
+                mapFragment.getLocation() // Set map location as current localisation
             }
             else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
@@ -110,15 +135,5 @@ class MainActivity : TreeCreator, AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER)
-    }
-
-    override fun onTreeCreated(tree: Tree) {
-        trees.addTree(tree)
-        displayListFragment()
-    }
 
 }
