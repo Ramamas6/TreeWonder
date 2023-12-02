@@ -73,7 +73,7 @@ class CreateTreeFragment3 : Fragment() {
             val latitude = edtLatitude.text.toString().toDouble()
             val address = edtAddress.text.toString()
 
-            val tree = Tree(-1,
+            val tree = Tree(1,
                             name,
                             commonName,
                             botanicName,

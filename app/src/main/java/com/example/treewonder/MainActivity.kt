@@ -17,7 +17,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val TREE_KEY = "tree-key"
 private const val SERVER_BASE_URL = "https://treewonder.cleverapps.io/"
 
 class MainActivity : AppCompatActivity() {
@@ -88,12 +87,14 @@ class MainActivity : AppCompatActivity() {
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val treeCreated = result.data?.getSerializableExtra(TREE_KEY)
-            treeService.createTree(treeCreated as Tree)
+            val treeCreated = result.data?.getSerializableExtra(TREE_KEY) as Tree
+            Toast.makeText(this, treeCreated.name, Toast.LENGTH_LONG).show()
+            treeService.createTree(treeCreated)
                 .enqueue {
                     onResponse = {
                         val treeFromServer: Tree? = it.body()
                         trees.addTree(treeFromServer!!)
+
                         displayMapFragment()
                     }
                     onFailure = {
