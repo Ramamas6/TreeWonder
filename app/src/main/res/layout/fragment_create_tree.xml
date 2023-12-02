@@ -36,40 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_common_name" />
 
-    <EditText
-        android:id="@+id/f_create_tree_edt_height"
-        android:layout_width="176dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Height"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
-
-    <EditText
-        android:id="@+id/f_create_tree_edt_circumference"
-        android:layout_width="176dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Circumference"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
-
-
-    <EditText
-        android:id="@+id/f_create_tree_edt_development_stage"
-        android:layout_width="245dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:hint="Development stage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_height" />
 
     <Button
         android:id="@+id/f_create_tree_btn_next"
@@ -80,5 +46,69 @@
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <SeekBar
+        android:id="@+id/f_create_tree_sld_height"
+        android:layout_width="278dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="4dp"
+        android:max="100"
+        android:min="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <SeekBar
+        android:id="@+id/f_create_tree_sld_circumference"
+        android:layout_width="278dp"
+        android:layout_height="26dp"
+        android:max="10"
+        android:min="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Height:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Circumference:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_sld_height" />
+
+    <Spinner
+        android:id="@+id/f_create_tree_spn_development_stage"
+        android:layout_width="178dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/array_development_stage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Develpment stage:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_sld_circumference" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
