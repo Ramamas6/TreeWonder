@@ -12,24 +12,15 @@ class CreateTreeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_tree)
 
-        val btnExit = findViewById<Button>(R.id.a_create_tree_exit)
-        // Click on "Exit" button : switch to main activity and send it the tree
-        btnExit.setOnClickListener {
-            val tree = Tree(1, "Name", "commonName", "botanicName", 10, 10, "", 0, "", "", "", "", "", "", "", "", 40.0, 40.0, "")
-            val returnIntent = Intent()
-            returnIntent.putExtra(TREE_KEY, tree)
-            setResult(Activity.RESULT_OK, returnIntent)
-            finish()
-        }
+        displayCreatedTreeFragment()
 
     }
         private fun displayCreatedTreeFragment(){
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(
-                R.id.a_main_toolbal_fragment,
+                R.id.a_main_lyt_fragment,
                 CreateTreeFragment()
             )
-            transaction.commit()
-            //floatingActionButton.visibility = View.GONE
+            val rez = transaction.commit()
         }
 }
