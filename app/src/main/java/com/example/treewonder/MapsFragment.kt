@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
 import android.Manifest
-import android.app.Activity
 import android.location.Location
 
 import android.os.Bundle
@@ -14,9 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -26,38 +23,51 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.ClusterManager
+
 class MapsFragment : Fragment() {
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
+    private lateinit var clusterManager: ClusterManager<LandMark>
     // Used to manage the case when treeData from API is ready before the map
     private var treeInit = false
 
     private val callback = OnMapReadyCallback { map ->
         googleMap = map
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
+        // Setup clusterManager
+        clusterManager = ClusterManager(context, googleMap)
+        googleMap.setOnCameraIdleListener(clusterManager)
+        googleMap.setOnMarkerClickListener(clusterManager)
+        // Setup default camera
         map.moveCamera(CameraUpdateFactory.zoomTo(14f))
         val paris = LatLng(48.8589384,2.2646343)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(paris))
+        // Set camera on localisation
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
         getLocation()
+        // Add markers
         googleMap.addMarker(MarkerOptions().position(paris).title("Paris").snippet("Default position"))
         if(treeInit) {
             var trees = (activity as MainActivity).getTrees()
             // tree data from API was ready before: we have to add them now
-            trees.forEach { value -> googleMap.addMarker(
-                MarkerOptions().position(LatLng(value.latitude, value.longitude)).title(value.name).snippet(value.summary)
-            )}
+            trees.forEach { value -> addLandMark(value)}
         }
     }
 
     fun displayTrees(trees: ArrayList<Tree>) {
         treeInit = true
         if(::googleMap.isInitialized) {
-            trees.forEach { value -> googleMap.addMarker(
-                MarkerOptions().position(LatLng(value.latitude, value.longitude)).title(value.name).snippet(value.summary)
-            )}
+            trees.forEach { value -> addLandMark(value)}
         }
-}
+    }
+
+
+    private fun addLandMark(tree: Tree) {
+        //googleMap.addMarker(MarkerOptions().position(LatLng(tree.latitude, tree.longitude)).title(tree.name).snippet(tree.summary))
+        val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.summary)
+        clusterManager.addItem(newLandMark)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_maps, container, false)
