@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TreeWonder</string>
+
+    <string name="create_tree_title">Add Tree</string>
+    <string name="create_tree_next">Next</string>
+    <string name="create_tree_save">Save</string>
 </resources>
