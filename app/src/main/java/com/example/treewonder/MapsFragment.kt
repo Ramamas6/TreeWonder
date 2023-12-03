@@ -1,29 +1,40 @@
 package com.example.treewonder
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.LocationManager
-import androidx.fragment.app.Fragment
-import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
-
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
+import com.squareup.picasso.Picasso
+import java.io.BufferedInputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.concurrent.Executors
+
 
 class MapsFragment : Fragment() {
 
@@ -46,25 +57,34 @@ class MapsFragment : Fragment() {
         // Set camera on localisation
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
         getLocation()
+
         // Add markers
-        googleMap.addMarker(MarkerOptions().position(paris).title("Paris").snippet("Default position"))
+        val myExecutor = Executors.newSingleThreadExecutor()
+        val myHandler = Handler(Looper.getMainLooper())
+        myExecutor.execute {
+            val imageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg"
+            val bitmapImage = Picasso.get().load(imageUrl).resize(100, 200).get()
+            myHandler.post {
+                googleMap.addMarker(MarkerOptions().position(paris).title("Paris").icon(BitmapDescriptorFactory.fromBitmap(bitmapImage)))
+            }
+        }
         if(treeInit) {
-            var trees = (activity as MainActivity).getTrees()
             // tree data from API was ready before: we have to add them now
+            var trees = (activity as MainActivity).getTrees()
             trees.forEach { value -> addLandMark(value)}
         }
     }
 
+
     fun displayTrees(trees: ArrayList<Tree>) {
-        treeInit = true
         if(::googleMap.isInitialized) {
             trees.forEach { value -> addLandMark(value)}
         }
+        treeInit = true
     }
 
 
     private fun addLandMark(tree: Tree) {
-        //googleMap.addMarker(MarkerOptions().position(LatLng(tree.latitude, tree.longitude)).title(tree.name).snippet(tree.summary))
         val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.summary)
         clusterManager.addItem(newLandMark)
     }
@@ -81,7 +101,7 @@ class MapsFragment : Fragment() {
 
     @SuppressLint("MissingPermission", "SetTextI18n")
     fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(this.requireActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (isLocationEnabled()) {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(this.requireActivity()) { task ->
                     val location: Location? = task.result

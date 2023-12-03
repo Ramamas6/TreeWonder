@@ -93,8 +93,9 @@ class MainActivity : AppCompatActivity() {
                 .enqueue {
                     onResponse = {
                         val treeFromServer: Tree? = it.body()
-                        trees.addTree(treeFromServer!!)
-
+                        if(treeFromServer != null) {
+                            trees.addTree(treeFromServer)
+                        }
                         displayMapFragment()
                     }
                     onFailure = {
