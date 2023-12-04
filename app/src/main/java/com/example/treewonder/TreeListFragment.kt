@@ -15,6 +15,7 @@ class TreeListFragment : Fragment(){
     private  lateinit var treeAdapter: TreeAdapter
     private  lateinit var recyclerView: RecyclerView
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -22,12 +23,8 @@ class TreeListFragment : Fragment(){
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_book_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_tree_list, container, false)
 
         recyclerView = view.findViewById(R.id.f_tree_list_rcv_trees)
         treeAdapter = TreeAdapter(trees)
@@ -39,7 +36,6 @@ class TreeListFragment : Fragment(){
                 DividerItemDecoration.VERTICAL
             )
         )
-
         return view
     }
 

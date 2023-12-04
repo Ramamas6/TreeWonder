@@ -2,6 +2,7 @@ package com.example.treewonder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
@@ -17,12 +18,8 @@ class TreeAdapter(private var trees: List<Tree>): RecyclerView.Adapter<TreeViewH
         holder.txvName.text = tree.name
         Picasso.get().load(tree.picture).into(holder.img)
     }
+
     override fun getItemCount(): Int {
         return trees.size
-    }
-
-    fun updateTrees(allTrees: List<Tree>){
-        trees = allTrees
-        notifyDataSetChanged()
     }
 }
