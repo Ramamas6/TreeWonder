@@ -10,4 +10,5 @@
     <style name="DefaultTextStyle">
         <item name="android:textColor">@color/lightGray</item>
     </style>
+
 </resources>

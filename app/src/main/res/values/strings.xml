@@ -4,4 +4,6 @@
     <string name="create_tree_title">Add Tree</string>
     <string name="create_tree_next">Next</string>
     <string name="create_tree_save">Save</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

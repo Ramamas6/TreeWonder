@@ -1,16 +1,17 @@
 package com.example.treewonder
 
 
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.tabs.TabLayout
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.activity.result.ActivityResult
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val SERVER_BASE_URL = "https://treewonder.cleverapps.io/"
 
 class MainActivity : AppCompatActivity() {
+
     private val trees = Trees()
 
     private val retrofit = Retrofit.Builder()
@@ -31,34 +33,17 @@ class MainActivity : AppCompatActivity() {
     // Needed to send it the result of RequestPermissions for localisation
     private var mapFragment: MapsFragment = MapsFragment()
 
-    fun getTrees(): ArrayList<Tree> {
-        return trees.getAllTrees()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initData()
+        setUpToolBar()
+        setUpTabLayout()
 
+        // Display initial map fragment
         displayMapFragment()
-
-        val addTreeButton = findViewById<FloatingActionButton>(R.id.a_main_btn_create_tree)
-        addTreeButton.setOnClickListener{
-            val intent = Intent(this, CreateTreeActivity::class.java)
-            this.startForResult.launch(intent)
-        }
-
-        val buttonList = findViewById<Button>(R.id.a_main_button_list)
-        buttonList.setOnClickListener{ displayListFragment() }
-
-        val buttonMap = findViewById<Button>(R.id.a_main_button_map)
-        buttonMap.setOnClickListener { displayMapFragment() }
     }
 
-    /**
-     * Display the fragment with list of all trees
-     */
     private fun displayListFragment(){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -68,9 +53,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    /**
-     * Display the fragment with the map
-     */
     private fun displayMapFragment(){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -78,6 +60,18 @@ class MainActivity : AppCompatActivity() {
             mapFragment
         )
         transaction.commit()
+    }
+
+    private fun displayFavoriteFragment() {
+
+    }
+
+    private fun displaySettings() {
+
+    }
+
+    fun getTrees(): ArrayList<Tree> {
+        return trees.getAllTrees()
     }
 
     /**
@@ -123,6 +117,42 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    private fun setUpToolBar() {
+        // Display toolbar
+        var bar = findViewById<Toolbar>(R.id.a_main_toolbar)
+        setSupportActionBar(bar)
+        // Get toolbar buttons and set listeners
+        val addTreeButton = findViewById<FloatingActionButton>(R.id.a_main_btn_create_tree)
+        addTreeButton.setOnClickListener{
+            val intent = Intent(this, CreateTreeActivity::class.java)
+            this.startForResult.launch(intent)
+        }
+        val updateButton = findViewById<FloatingActionButton>(R.id.a_main_btn_update)
+        updateButton.setOnClickListener{initData()}
+        val settingsButton = findViewById<FloatingActionButton>(R.id.a_main_btn_settings)
+        settingsButton.setOnClickListener{displaySettings()}
+    }
+
+    private fun setUpTabLayout() {
+        // Create tabLayout (with map initially selected)
+        var tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+        tabLayout.addTab(tabLayout.newTab().setText("LIST"), 0, false)
+        tabLayout.addTab(tabLayout.newTab().setText("MAP"), 1, true)
+        tabLayout.addTab(tabLayout.newTab().setText("FAVORITES"), 2, false)
+
+        // Create tabLayout listener
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> displayListFragment()
+                    1 -> displayMapFragment()
+                    2 -> displayFavoriteFragment()
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -136,6 +166,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
 }
