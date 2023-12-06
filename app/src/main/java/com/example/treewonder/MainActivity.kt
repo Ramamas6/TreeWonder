@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun displayListFragment(){
+        // Manage empty text
         val emptyText = findViewById<TextView>(R.id.a_main_empty)
         if(trees.size() == 0) {
             emptyText.visibility = View.VISIBLE
@@ -56,26 +57,34 @@ class MainActivity : AppCompatActivity() {
                 emptyText.text = "Oops! It looks like you don't have an internet connection...\nPlease activate the connection and use the refresh button."
         }
         else {emptyText.visibility = View.GONE}
+        // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(
-            R.id.a_main_fragment,
-            TreeListFragment.newInstance(trees.getAllTrees())
-        )
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees()))
         transaction.commit()
+        // Manage location button
+        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+        fragmentButton.visibility = View.VISIBLE
+        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
+        fragmentButton.setOnClickListener{
+            Toast.makeText(this, "SEARCH TODO", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun displayMapFragment(){
+        // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(
-            R.id.a_main_fragment,
-            mapFragment
-        )
+        transaction.replace(R.id.a_main_fragment, mapFragment)
         transaction.commit()
+        // Manage location button
+        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+        fragmentButton.visibility = View.VISIBLE
+        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
+        fragmentButton.setOnClickListener{mapFragment.getLocation()}
     }
 
     private fun displayFavoriteFragment() {
-        if(isInternetEnabled(this)) Toast.makeText(this, "Internet activated", Toast.LENGTH_SHORT).show()
-        else Toast.makeText(this, "Internet Denied", Toast.LENGTH_SHORT).show()
+        findViewById<FloatingActionButton>(R.id.f_main_btn).visibility = View.GONE
+        findViewById<TextView>(R.id.a_main_empty).visibility = View.GONE
     }
 
     private fun displaySettings() {
@@ -157,7 +166,6 @@ class MainActivity : AppCompatActivity() {
         tabLayout.addTab(tabLayout.newTab().setText("LIST"), 0, false)
         tabLayout.addTab(tabLayout.newTab().setText("MAP"), 1, true)
         tabLayout.addTab(tabLayout.newTab().setText("FAVORITES"), 2, false)
-
         // Create tabLayout listener
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {

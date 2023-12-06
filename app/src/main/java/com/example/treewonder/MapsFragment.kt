@@ -44,7 +44,7 @@ class MapsFragment : Fragment() {
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
         // Setup default camera
-        map.moveCamera(CameraUpdateFactory.zoomTo(14f))
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
         val paris = LatLng(48.8589384,2.2646343)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(paris))
         // Set camera on localisation
@@ -102,6 +102,7 @@ class MapsFragment : Fragment() {
                     if(location != null) {
                         val loc = LatLng(location.latitude, location.longitude)
                         googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
+                        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
                     }
                 }
             } else {
