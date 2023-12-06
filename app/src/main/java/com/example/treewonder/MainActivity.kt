@@ -1,22 +1,24 @@
 package com.example.treewonder
 
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.tabs.TabLayout
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 private const val SERVER_BASE_URL = "https://treewonder.cleverapps.io/"
 
@@ -36,15 +38,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initData()
-        setUpToolBar()
-        setUpTabLayout()
 
-        // Display initial map fragment
-        displayMapFragment()
+        setUpToolBar() // Create the ToolBar menu
+        setUpTabLayout() // Create the navigation bar
+        displayMapFragment() // Display initial map fragment
+        initData() // Load the trees from the API
     }
 
+    @SuppressLint("SetTextI18n")
     private fun displayListFragment(){
+        val emptyText = findViewById<TextView>(R.id.a_main_empty)
+        if(trees.size() == 0) {
+            emptyText.visibility = View.VISIBLE
+            if(isInternetEnabled(this))
+                emptyText.text = "oops ! It seem there is no tree to display...\nPlease use the refresh button or contact the administrators if this doesn't work."
+            else
+                emptyText.text = "Oops! It looks like you don't have an internet connection...\nPlease activate the connection and use the refresh button."
+        }
+        else {emptyText.visibility = View.GONE}
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.a_main_fragment,
@@ -63,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayFavoriteFragment() {
-
+        if(isInternetEnabled(this)) Toast.makeText(this, "Internet activated", Toast.LENGTH_SHORT).show()
+        else Toast.makeText(this, "Internet Denied", Toast.LENGTH_SHORT).show()
     }
 
     private fun displaySettings() {
@@ -104,23 +116,29 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initData() {
         /** Get every tree from the API **/
-        treeService.getAllTrees()
-            .enqueue(object : Callback<List<Tree>> {
+        if(isInternetEnabled(this)) {
+            treeService.getAllTrees().enqueue(object : Callback<List<Tree>> {
                 override fun onResponse(call: Call<List<Tree>>, response: Response<List<Tree>>) {
                     val allTrees: List<Tree> = response.body()!!
                     trees.addTrees(allTrees)
                     mapFragment.displayTrees(trees.getAllTrees())
+                    when (findViewById<TabLayout>(R.id.a_main_tabs).selectedTabPosition) {
+                        0 -> displayListFragment()
+                        1 -> displayMapFragment()
+                        2 -> displayFavoriteFragment()
+                    }
                 }
                 override fun onFailure(call: Call<List<Tree>>, t: Throwable) {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
             })
+        }
+        else {Toast.makeText(this, "Unable to load data: no internet connection detected", Toast.LENGTH_SHORT).show()}
     }
 
     private fun setUpToolBar() {
         // Display toolbar
-        var bar = findViewById<Toolbar>(R.id.a_main_toolbar)
-        setSupportActionBar(bar)
+        setSupportActionBar(findViewById(R.id.a_main_toolbar))
         // Get toolbar buttons and set listeners
         val addTreeButton = findViewById<FloatingActionButton>(R.id.a_main_btn_create_tree)
         addTreeButton.setOnClickListener{
@@ -135,7 +153,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpTabLayout() {
         // Create tabLayout (with map initially selected)
-        var tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+        val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
         tabLayout.addTab(tabLayout.newTab().setText("LIST"), 0, false)
         tabLayout.addTab(tabLayout.newTab().setText("MAP"), 1, true)
         tabLayout.addTab(tabLayout.newTab().setText("FAVORITES"), 2, false)
@@ -157,14 +175,7 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         /** Localisation permission **/
-        if (requestCode == 2) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                mapFragment.getLocation() // Set map location as current localisation
-            }
-            else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-        }
+        if (requestCode == 2) {this.mapFragment.requestLocationResult(grantResults)}
     }
 
 }

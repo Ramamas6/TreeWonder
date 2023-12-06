@@ -118,6 +118,16 @@ class MapsFragment : Fragment() {
             2)
     }
 
+    fun requestLocationResult(grantResults: IntArray) {
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            Toast.makeText(this.context, "your location was sold for \$4 on the dark web, thank you for your cooperation", Toast.LENGTH_SHORT).show()
+            getLocation() // Set map location as current localisation
+        }
+        else {
+            Toast.makeText(this.context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager = this.requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
