@@ -20,11 +20,10 @@
         android:id="@+id/f_create_tree_edt_common_name"
         android:layout_width="245dp"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
         android:hint="Common name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_name" />
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_txt_name_error" />
 
     <EditText
         android:id="@+id/f_create_tree_edt_botanic_name"
@@ -108,5 +107,13 @@
         android:text="Development stage:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_create_tree_sld_circumference" />
+
+    <TextView
+        android:id="@+id/f_create_tree_txt_name_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/f_create_tree_edt_name"
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
