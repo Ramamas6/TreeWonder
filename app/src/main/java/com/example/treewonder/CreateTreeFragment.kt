@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,7 +19,9 @@ class CreateTreeFragment: Fragment() {
     private lateinit var edtName: EditText
     private lateinit var edtCommonName: EditText
     private lateinit var edtBotanicName: EditText
+    private lateinit var txtHeight: TextView
     private lateinit var sldHeight: SeekBar
+    private lateinit var txtCircumference: TextView
     private lateinit var sldCircumference: SeekBar
     private lateinit var spnDevelopmentStage: Spinner
 
@@ -32,9 +35,37 @@ class CreateTreeFragment: Fragment() {
         edtName = view.findViewById(R.id.f_create_tree_edt_name)
         edtCommonName = view.findViewById(R.id.f_create_tree_edt_common_name)
         edtBotanicName = view.findViewById(R.id.f_create_tree_edt_botanic_name)
+        txtHeight = view.findViewById(R.id.f_create_tree_txt_height)
         sldHeight = view.findViewById(R.id.f_create_tree_sld_height)
+        txtCircumference = view.findViewById(R.id.f_create_tree_txt_circumference)
         sldCircumference = view.findViewById(R.id.f_create_tree_sld_circumference)
         spnDevelopmentStage = view.findViewById(R.id.f_create_tree_spn_development_stage)
+
+
+        sldHeight.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                txtHeight.text = "Height: $progress m"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
+        sldCircumference.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                txtCircumference.text = "Circumference $progress cm"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
 
         btnNext = view.findViewById(R.id.f_create_tree_btn_next)
         btnNext.setOnClickListener {

@@ -51,27 +51,25 @@
         android:id="@+id/f_create_tree_sld_height"
         android:layout_width="278dp"
         android:layout_height="26dp"
-        android:layout_marginTop="4dp"
         android:max="100"
         android:min="0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_txt_height" />
 
     <SeekBar
         android:id="@+id/f_create_tree_sld_circumference"
         android:layout_width="278dp"
         android:layout_height="26dp"
-        android:max="10"
+        android:layout_marginTop="8dp"
+        android:max="1000"
         android:min="0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_txt_circumference" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/f_create_tree_txt_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -81,33 +79,33 @@
         app:layout_constraintTop_toBottomOf="@+id/f_create_tree_edt_botanic_name" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/f_create_tree_txt_circumference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="Circumference:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_create_tree_sld_height" />
 
     <Spinner
         android:id="@+id/f_create_tree_spn_development_stage"
-        android:layout_width="178dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="182dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="4dp"
         android:entries="@array/array_development_stage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/f_create_tree_txt_development_stage" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/f_create_tree_txt_development_stage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Develpment stage:"
+        android:text="Development stage:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_create_tree_sld_circumference" />
 
