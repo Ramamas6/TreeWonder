@@ -88,7 +88,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displaySettings() {
-
+        // Display fragment
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.a_main_fragment, SettingsFragment())
+        transaction.commit()
+        // Manage location button
+        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+        fragmentButton.visibility = View.VISIBLE
+        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+        fragmentButton.setOnClickListener{Toast.makeText(this, "DELETE TODO", Toast.LENGTH_SHORT).show()}
     }
 
     fun getTrees(): ArrayList<Tree> {
