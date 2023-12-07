@@ -1,5 +1,7 @@
 package com.example.treewonder
 
+import android.widget.Toast
+
 class Trees {
     private val storage = HashMap<Int, Tree>()
 
@@ -18,6 +20,11 @@ class Trees {
     fun getAllTrees(): ArrayList<Tree> {
         return ArrayList(storage.values
             .sortedBy { tree: Tree -> tree.name })
+
+    }
+
+    fun getTrees(favoritesID: List<Int>): ArrayList<Tree> {
+        return ArrayList(favoritesID.mapNotNull { id -> storage[id] })
     }
 
     fun size(): Int {
