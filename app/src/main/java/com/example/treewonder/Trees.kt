@@ -31,4 +31,8 @@ class Trees {
         return storage.size
     }
 
+    fun clear() {
+        storage.clear()
+    }
+
 }

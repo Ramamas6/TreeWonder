@@ -4,6 +4,7 @@ package com.example.treewonder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,7 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
@@ -110,15 +113,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displaySettings() {
-        // Display fragment
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, SettingsFragment())
-        transaction.commit()
-        // Manage location button
-        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.VISIBLE
-        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
-        fragmentButton.setOnClickListener{Toast.makeText(this, "DELETE TODO", Toast.LENGTH_SHORT).show()}
+        val settingsFragment = supportFragmentManager.findFragmentByTag("SettingsFragment") as? SettingsFragment
+        if (settingsFragment == null) {
+            // Display fragment
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.a_main_fragment, SettingsFragment(), "SettingsFragment")
+            transaction.commit()
+            // Manage button
+            val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+            fragmentButton.visibility = View.VISIBLE
+            fragmentButton.setImageResource(
+                resources.getIdentifier(
+                    "@android:drawable/ic_menu_delete",
+                    null,
+                    null
+                )
+            )
+            fragmentButton.setOnClickListener { deleteLocalData() }
+        }
+        else {
+            val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+            tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
+        }
+    }
+
+    private fun deleteLocalData() {
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Are you sure you want to delete all the trees currently stored in the app ?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                trees.clear()
+                Toast.makeText(this, "All trees have been locally deleted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
+        val alert = builder.create()
+        alert.show()
     }
 
     fun getTrees(): ArrayList<Tree> {
@@ -189,11 +218,8 @@ class MainActivity : AppCompatActivity() {
                     val allTrees: List<Tree> = response.body()!!
                     trees.addTrees(allTrees)
                     mapFragment.displayTrees(trees.getAllTrees())
-                    when (findViewById<TabLayout>(R.id.a_main_tabs).selectedTabPosition) {
-                        0 -> displayListFragment()
-                        1 -> displayMapFragment()
-                        2 -> displayFavoriteFragment()
-                    }
+                    val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+                    tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
                 }
                 override fun onFailure(call: Call<List<Tree>>, t: Throwable) {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
@@ -234,7 +260,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> displayListFragment()
+                    1 -> displayMapFragment()
+                    2 -> displayFavoriteFragment()
+                }
+            }
         })
     }
 
