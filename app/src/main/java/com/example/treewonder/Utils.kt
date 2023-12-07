@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.provider.Telephony.Mms.Part.FILENAME
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+
 
 fun<T> Call<T>.enqueue(callback: CallBackKt<T>.() -> Unit) {
     val callBackKt = CallBackKt<T>()
@@ -46,3 +49,31 @@ fun isInternetEnabled(context: Context): Boolean {
         return networkInfo.isConnected
     }
 }
+/*
+private fun readFromStorage() {
+    val directory = getFilesDir()
+    binding.tripBookActivityEditText.setText(
+        StorageUtils.getTextFromStorage(
+            directory,
+            this,
+            FILENAME,
+            FOLDERNAME
+        )
+    )
+}
+
+private fun writeOnInternalStorage() {
+    val directory = getCacheDir()
+    binding.tripBookActivityEditText.setText(
+        StorageUtils.getTextFromStorage(
+            directory,
+            this,
+            FILENAME,
+            FOLDERNAME
+        )
+    )
+
+    StorageUtils.setTextInStorage(directory, this, FILENAME, FOLDERNAME, binding.tripBookActivityEditText.getText().toString());
+}
+
+ */

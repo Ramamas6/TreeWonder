@@ -121,7 +121,7 @@ class MapsFragment : Fragment() {
 
     fun requestLocationResult(grantResults: IntArray) {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-            Toast.makeText(this.context, "your location was sold for \$4 on the dark web, thank you for your cooperation", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, "Thank you, your location was sold for \$4 on the dark web", Toast.LENGTH_SHORT).show()
             getLocation() // Set map location as current localisation
         }
         else {

@@ -3,6 +3,7 @@ package com.example.treewonder
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,13 +19,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 
 private const val SERVER_BASE_URL = "https://treewonder.cleverapps.io/"
+private const val FILENAME = "favorites.txt"
 
 class MainActivity : AppCompatActivity() {
-
+    // Map of trees
     private val trees = Trees()
+    // File for favorites
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -38,11 +42,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val file = File(this.filesDir, FILENAME)
+        if (!file.exists()) file.appendText("10 15 20 30") // Creates the file if it doesn't exists yet
 
         setUpToolBar() // Create the ToolBar menu
         setUpTabLayout() // Create the navigation bar
         displayMapFragment() // Display initial map fragment
         initData() // Load the trees from the API
+
+
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -61,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees()))
         transaction.commit()
-        // Manage location button
+        // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
@@ -75,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.a_main_fragment, mapFragment)
         transaction.commit()
-        // Manage location button
+        // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
@@ -83,8 +92,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayFavoriteFragment() {
-        findViewById<FloatingActionButton>(R.id.f_main_btn).visibility = View.GONE
-        findViewById<TextView>(R.id.a_main_empty).visibility = View.GONE
+        val favoriteTrees = getFavoriteTrees()
+        // Manage empty text
+        val emptyText = findViewById<TextView>(R.id.a_main_empty)
+        if(favoriteTrees.size == 0) {
+            emptyText.visibility = View.VISIBLE
+            emptyText.text = "No favourites to display"
+        }
+        else {emptyText.visibility = View.GONE}
+        // Display fragment
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees))
+        transaction.commit()
+        // Manage button
+        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+        fragmentButton.visibility = View.GONE
     }
 
     private fun displaySettings() {
@@ -101,6 +123,34 @@ class MainActivity : AppCompatActivity() {
 
     fun getTrees(): ArrayList<Tree> {
         return trees.getAllTrees()
+    }
+
+    private fun getFavoriteTrees(): ArrayList<Tree> {
+        val favorites = File(this.filesDir, FILENAME).readText()
+        if(favorites.isEmpty()) return ArrayList<Tree>()
+        val favoritesID = favorites.dropLast(1).split(" ").map { it.toInt() }
+        return trees.getTrees(favoritesID)
+    }
+
+    /** Adds or removes a tree from the favorites
+     * @param id id of the tree to add/remove from favorites
+     */
+    private fun changeFavorites(id: Int) {
+        // Read favorites
+        val contents = File(this.filesDir, FILENAME).readText() // Read file
+        val index = contents.indexOf("$id ")
+        // This id is not already in favorites: adds it
+        if (index == -1) {
+            this.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
+                it.write(contents.plus("$id ").toByteArray())
+            }
+        }
+        // This id is already in favorites: deletes it
+        else {
+            this.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
+                it.write(contents.removeRange(index, index + id.toString().length + 1).toByteArray())
+            }
+        }
     }
 
     /**
