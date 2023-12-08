@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 private const val ARG_TREES = "param1"
-class TreeListFragment : Fragment(){
+class TreeListFragment : Fragment(), OnTreeClickListener {
     private var trees: ArrayList<Tree> = arrayListOf()
     private  lateinit var treeAdapter: TreeAdapter
     private  lateinit var recyclerView: RecyclerView
@@ -27,7 +28,7 @@ class TreeListFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_tree_list, container, false)
 
         recyclerView = view.findViewById(R.id.f_tree_list_rcv_trees)
-        treeAdapter = TreeAdapter(trees)
+        treeAdapter = TreeAdapter(trees, this)
         recyclerView.adapter = treeAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(
@@ -47,5 +48,9 @@ class TreeListFragment : Fragment(){
                     putSerializable(ARG_TREES, trees)
                 }
             }
+    }
+
+    override fun onTreeClick(tree: Tree) {
+        Toast.makeText(context, tree.name, Toast.LENGTH_SHORT).show()
     }
 }
