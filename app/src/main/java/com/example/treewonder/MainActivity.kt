@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         val emptyText = findViewById<TextView>(R.id.a_main_empty)
         if(favoriteTrees.size == 0) {
             emptyText.visibility = View.VISIBLE
-            emptyText.text = "No favourites to display"
+            emptyText.text = "Hmmmm... Your favourites look pretty empty"
         }
         else {emptyText.visibility = View.GONE}
         // Display fragment
@@ -118,10 +118,12 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.GONE
+        fragmentButton.visibility = View.VISIBLE
+        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+        fragmentButton.setOnClickListener { deleteFavorites() }
     }
 
-    private fun displaySettings() {
+    private fun displaySettingsFragment() {
         val settingsFragment = supportFragmentManager.findFragmentByTag("SettingsFragment") as? SettingsFragment
         if (settingsFragment == null) {
             // Display fragment
@@ -144,23 +146,6 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.a_main_fragment, TreeFragment.newInstance(tree), "TreeFragment")
         transaction.commit()
-    }
-
-    private fun deleteLocalData() {
-        val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setMessage("Are you sure you want to delete all the trees currently stored in the app ?")
-            .setCancelable(false)
-            .setPositiveButton("Yes") { _, _ ->
-                trees.clear()
-                Toast.makeText(this, "All trees have been locally deleted", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
-        val alert = builder.create()
-        alert.show()
-    }
-
-    fun getTrees(): ArrayList<Tree> {
-        return trees.getAllTrees()
     }
 
     /** Adds or removes a tree from the favorites
@@ -190,6 +175,39 @@ class MainActivity : AppCompatActivity() {
             val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
             tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
         }
+    }
+
+    private fun deleteFavorites() {
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Are you sure you want to delete all your favorites ?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                favoritesList.clear()
+                this.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
+                    it.write("".toByteArray())
+                    displayFavoriteFragment()
+                }
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
+        val alert = builder.create()
+        alert.show()
+    }
+
+    private fun deleteLocalData() {
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Are you sure you want to delete all the trees currently stored in the app ?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                trees.clear()
+                Toast.makeText(this, "All trees have been locally deleted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
+        val alert = builder.create()
+        alert.show()
+    }
+
+    fun getTrees(): ArrayList<Tree> {
+        return trees.getAllTrees()
     }
 
     /**
@@ -257,7 +275,7 @@ class MainActivity : AppCompatActivity() {
         val updateButton = findViewById<FloatingActionButton>(R.id.a_main_btn_update)
         updateButton.setOnClickListener{initData()}
         val settingsButton = findViewById<FloatingActionButton>(R.id.a_main_btn_settings)
-        settingsButton.setOnClickListener{displaySettings()}
+        settingsButton.setOnClickListener{displaySettingsFragment()}
     }
 
     private fun setUpTabLayout() {

@@ -4,7 +4,6 @@
     <string name="create_tree_title">Add Tree</string>
     <string name="create_tree_next">Next</string>
     <string name="create_tree_save">Save</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="SettingsFragment">\n<big><b>Info générales sur l\'application :</b></big>\n
         \n<b>- URL des données :</b>\n
             <i>treewonder.cleverapps.io/trees</i>\n
@@ -12,6 +11,5 @@
             <i>public.opendatasoft.com/explore/dataset/arbresremarquablesparis2011/table/</i>\n
         "
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
