@@ -9,7 +9,7 @@ class TreeAdapter(private var trees: List<Tree>, private val clickListener: OnTr
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreeViewHolder {
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_tree, parent, false)
-        return TreeViewHolder(rowView)
+        return TreeViewHolder(rowView, clickListener)
     }
 
     override fun onBindViewHolder(holder: TreeViewHolder, position: Int) {

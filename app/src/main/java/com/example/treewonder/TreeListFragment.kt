@@ -51,6 +51,9 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
     }
 
     override fun onTreeClick(tree: Tree) {
-        Toast.makeText(context, tree.name, Toast.LENGTH_SHORT).show()
+        (activity as MainActivity).displayTreeFragment(tree)
+    }
+    override fun onFavoriteClick(tree: Tree) {
+        (activity as MainActivity).changeFavorites(tree.id)
     }
 }

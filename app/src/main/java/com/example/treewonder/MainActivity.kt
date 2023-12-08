@@ -138,6 +138,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun displayTreeFragment(tree: Tree) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.a_main_fragment, TreeFragment.newInstance(tree), "TreeFragment")
+        transaction.commit()
+    }
+
     private fun deleteLocalData() {
         val builder = AlertDialog.Builder(this@MainActivity)
         builder.setMessage("Are you sure you want to delete all the trees currently stored in the app ?")
@@ -165,7 +171,7 @@ class MainActivity : AppCompatActivity() {
     /** Adds or removes a tree from the favorites
      * @param id id of the tree to add/remove from favorites
      */
-    private fun changeFavorites(id: Int) {
+    fun changeFavorites(id: Int) {
         // Read favorites
         val contents = File(this.filesDir, FILENAME).readText() // Read file
         val index = contents.indexOf("$id ")
