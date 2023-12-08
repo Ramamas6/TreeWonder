@@ -33,7 +33,6 @@ import java.util.concurrent.Executors
 
 class MapsFragment : Fragment() {
 
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
     private lateinit var clusterManager: ClusterManager<LandMark>
     // Used to manage the case when treeData from API is ready before the map
@@ -50,8 +49,13 @@ class MapsFragment : Fragment() {
         val paris = LatLng(48.8589384,2.2646343)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(paris))
         // Set camera on localisation
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
-        getLocation()
+        getLocation(this.requireActivity()) { result ->
+            if (result != null) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(result))
+                googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+            }
+            else {}
+        }
 
         // Add markers
         val myExecutor = Executors.newSingleThreadExecutor()
@@ -97,46 +101,13 @@ class MapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
-    fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(this.requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (isLocationEnabled()) {
-                mFusedLocationClient.lastLocation.addOnCompleteListener(this.requireActivity()) { task ->
-                    val location: Location? = task.result
-                    if(location != null) {
-                        val loc = LatLng(location.latitude, location.longitude)
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
-                        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
-                    }
-                }
-            } else {
-                Toast.makeText(this.activity, "Please turn on location", Toast.LENGTH_LONG).show()
+    fun setCameraOnLocation() {
+        getLocation(this.requireActivity()) { result ->
+            if (result != null) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(result))
+                googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
             }
-        } else {
-            requestPermissions()
+            else {}
         }
     }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(this.requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            2)
-    }
-
-    fun requestLocationResult(grantResults: IntArray) {
-        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-            Toast.makeText(this.context, "Thank you, your location was sold for \$4 on the dark web", Toast.LENGTH_SHORT).show()
-            getLocation() // Set map location as current localisation
-        }
-        else {
-            Toast.makeText(this.context, "Permission Denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = this.requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER)
-    }
-
 }

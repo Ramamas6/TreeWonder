@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees()))
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees()), "TreeListFragment")
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
@@ -91,13 +92,13 @@ class MainActivity : AppCompatActivity() {
     private fun displayMapFragment(){
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, mapFragment)
+        transaction.replace(R.id.a_main_fragment, mapFragment, "MapsFragment")
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
-        fragmentButton.setOnClickListener{mapFragment.getLocation()}
+        fragmentButton.setOnClickListener{mapFragment.setCameraOnLocation()}
     }
 
     private fun displayFavoriteFragment() {
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees))
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees), "FavoritesFragment")
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
@@ -128,13 +129,7 @@ class MainActivity : AppCompatActivity() {
             // Manage button
             val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
             fragmentButton.visibility = View.VISIBLE
-            fragmentButton.setImageResource(
-                resources.getIdentifier(
-                    "@android:drawable/ic_menu_delete",
-                    null,
-                    null
-                )
-            )
+            fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
             fragmentButton.setOnClickListener { deleteLocalData() }
         }
         else {
@@ -279,7 +274,14 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         /** Localisation permission **/
-        if (requestCode == 2) {this.mapFragment.requestLocationResult(grantResults)}
+        if (requestCode == 2) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(this, "Thank you, your location was sold for \$4 on the dark web", Toast.LENGTH_SHORT).show()
+                // Case map fragment open : set camera on localisation
+                if (supportFragmentManager.findFragmentByTag("MapsFragment") as? MapsFragment != null)
+                    mapFragment.setCameraOnLocation()
+            }
+        }
     }
 
 }
