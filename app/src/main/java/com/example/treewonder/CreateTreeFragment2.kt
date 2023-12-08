@@ -1,6 +1,5 @@
 package com.example.treewonder
 
-import android.icu.number.IntegerWidth
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 
 class CreateTreeFragment2 : Fragment() {
@@ -28,6 +26,7 @@ class CreateTreeFragment2 : Fragment() {
     private lateinit var edtSpecies: EditText
     private lateinit var edtVariety: EditText
     private lateinit var edtSign: EditText
+    private lateinit var edtPicure: EditText
     private lateinit var btnNext: Button
 
 
@@ -57,6 +56,7 @@ class CreateTreeFragment2 : Fragment() {
         edtSpecies = view.findViewById(R.id.f_create_tree_edt_species)
         edtVariety = view.findViewById(R.id.f_create_tree_edt_variety)
         edtSign = view.findViewById(R.id.f_create_tree_edt_sign)
+        edtPicure = view.findViewById(R.id.f_create_tree_edt_picture)
         btnNext = view.findViewById(R.id.f_create_tree_btn_next)
 
         btnNext.setOnClickListener {
@@ -80,6 +80,7 @@ class CreateTreeFragment2 : Fragment() {
             bundle.putString("species", edtSpecies.text.toString())
             bundle.putString("variety", edtVariety.text.toString())
             bundle.putString("sign", edtSign.text.toString())
+            bundle.putString("picture", edtPicure.text.toString())
             nextFragment.arguments = bundle
             val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
             transaction

@@ -1,17 +1,23 @@
 package com.example.treewonder
 
 import android.content.Context
+import android.graphics.Point
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
-import java.text.DecimalFormat
+import android.widget.Toast
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 
 
-class CreateTreeFragment3 : Fragment() {
+class CreateTreeFragment3 : Fragment(), OnMapReadyCallback {
 
     private lateinit var listener: TreeCreator
 
@@ -29,14 +35,14 @@ class CreateTreeFragment3 : Fragment() {
     private var species: String = ""
     private var variety: String = ""
     private var sign: String = ""
-    private var picture: String = "www.image.com"
+    private var picture: String = ""
     private var longitude = 0.0
     private var latitude = 0.0
+    private var address: String = ""
 
-    private lateinit var edtPicture: EditText
-    private lateinit var edtLongitude: EditText
-    private lateinit var edtLatitude: EditText
-    private lateinit var edtAddress: EditText
+    private lateinit var mapView: MapView
+    private lateinit var googleMap: GoogleMap
+
     private lateinit var btnSave: Button
 
     override fun onCreateView(
@@ -44,6 +50,11 @@ class CreateTreeFragment3 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_create_tree3, container, false)
+
+        //Init map view
+        mapView = view.findViewById(R.id.mapView)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
 
         //Get data from the parent fragment
         val treeData: Bundle? = arguments
@@ -62,26 +73,17 @@ class CreateTreeFragment3 : Fragment() {
             species = treeData.getString("species", "")
             variety = treeData.getString("variety", "")
             sign = treeData.getString("sign", "")
+            picture = treeData.getString("picture", "")
         }
-        edtPicture = view.findViewById(R.id.f_create_tree_edt_picture)
-        edtLongitude = view.findViewById(R.id.f_create_tree_edt_longitude)
-        edtLatitude = view.findViewById(R.id.f_create_tree_edt_latitude)
-        edtAddress = view.findViewById(R.id.f_create_tree_edt_address)
         btnSave = view.findViewById(R.id.f_create_tree_btn_save)
 
         btnSave.setOnClickListener {
-            val picture = edtPicture.text.toString()
 
-            if(edtLatitude.text.isNotEmpty()){
-                longitude = edtLongitude.text.toString().toDouble()
-            }
-            if(edtLongitude.text.isNotEmpty()){
-                latitude = edtLatitude.text.toString().toDouble()
-            }
-
-
-            val address = edtAddress.text.toString()
-
+            val projection = googleMap.projection
+            val visibleRegion: LatLngBounds = projection.visibleRegion.latLngBounds
+            val centerScreenLatLng = visibleRegion.center
+            latitude = centerScreenLatLng.latitude
+            longitude = centerScreenLatLng.longitude
             val tree = Tree(1,
                             name,
                             commonName,
@@ -98,8 +100,8 @@ class CreateTreeFragment3 : Fragment() {
                             variety,
                             sign,
                             picture,
-                            longitude,
                             latitude,
+                            longitude,
                             address
             )
 
@@ -114,5 +116,13 @@ class CreateTreeFragment3 : Fragment() {
         }else{
             throw IllegalStateException("$context must implement TreeCreator")
         }
+    }
+
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+
+        val paris = LatLng(48.858844, 2.294350)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(paris, 12f))
     }
 }
