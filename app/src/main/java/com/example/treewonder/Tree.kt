@@ -66,9 +66,10 @@ class TreeSerializer : JsonSerializer<Tree> {
         if (src.picture.isNotBlank()) {
             treeObject.addProperty("picture", src.picture)
         }
-
-        treeObject.addProperty("latitude", src.latitude)
-        treeObject.addProperty("longitude", src.longitude)
+        if(src.latitude != 0.0)
+            treeObject.addProperty("latitude", src.latitude)
+        if(src.longitude != 0.0)
+            treeObject.addProperty("longitude", src.longitude)
         if(src.address.isNotBlank())
             treeObject.addProperty("address", src.address)
 
