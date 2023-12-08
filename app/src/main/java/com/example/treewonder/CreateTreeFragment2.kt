@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 
 class CreateTreeFragment2 : Fragment() {
@@ -17,6 +18,7 @@ class CreateTreeFragment2 : Fragment() {
     private var height: Int = 0
     private var circumference: Int = 0
     private var developmentStage: String  =""
+    private var plantationYear = 1800
 
     private lateinit var edtPlantationYear: EditText
     private lateinit var edtOutstandingQualification: EditText
@@ -58,6 +60,10 @@ class CreateTreeFragment2 : Fragment() {
         btnNext = view.findViewById(R.id.f_create_tree_btn_next)
 
         btnNext.setOnClickListener {
+
+            if (edtPlantationYear.text.isNotEmpty()) {
+                plantationYear = Integer.parseInt(edtPlantationYear.text.toString())
+            }
             val nextFragment = CreateTreeFragment3()
             val bundle = Bundle()
             bundle.putString("name", name)
@@ -66,7 +72,7 @@ class CreateTreeFragment2 : Fragment() {
             bundle.putInt("height", height)
             bundle.putInt("circumference", circumference)
             bundle.putString("developmentStage", developmentStage)
-            bundle.putInt("plantationYear", Integer.parseInt(edtPlantationYear.text.toString()))
+            bundle.putInt("plantationYear", plantationYear)
             bundle.putString("outstandingQualification", edtOutstandingQualification.text.toString())
             bundle.putString("summary", edtSummary.text.toString())
             bundle.putString("description", edtDescription.text.toString())
