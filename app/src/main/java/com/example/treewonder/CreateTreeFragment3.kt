@@ -29,6 +29,9 @@ class CreateTreeFragment3 : Fragment() {
     private var species: String = ""
     private var variety: String = ""
     private var sign: String = ""
+    private var picture: String = "www.image.com"
+    private var longitude = 0.0
+    private var latitude = 0.0
 
     private lateinit var edtPicture: EditText
     private lateinit var edtLongitude: EditText
@@ -69,8 +72,14 @@ class CreateTreeFragment3 : Fragment() {
         btnSave.setOnClickListener {
             val picture = edtPicture.text.toString()
 
-            val longitude = edtLongitude.text.toString().toDouble()
-            val latitude = edtLatitude.text.toString().toDouble()
+            if(edtLatitude.text.isNotEmpty()){
+                longitude = edtLongitude.text.toString().toDouble()
+            }
+            if(edtLongitude.text.isNotEmpty()){
+                latitude = edtLatitude.text.toString().toDouble()
+            }
+
+
             val address = edtAddress.text.toString()
 
             val tree = Tree(1,

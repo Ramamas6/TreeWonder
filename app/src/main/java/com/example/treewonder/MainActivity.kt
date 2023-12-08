@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,10 +34,15 @@ class MainActivity : AppCompatActivity() {
     private val trees = Trees()
     // File for favorites
 
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Tree::class.java, TreeSerializer())
+        .create()
+
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(SERVER_BASE_URL)
         .build()
+
     private val treeService = retrofit.create(TreeService::class.java)
 
     // Needed to send it the result of RequestPermissions for localisation

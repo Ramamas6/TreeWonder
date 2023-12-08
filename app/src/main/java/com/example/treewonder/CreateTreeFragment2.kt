@@ -18,7 +18,7 @@ class CreateTreeFragment2 : Fragment() {
     private var height: Int = 0
     private var circumference: Int = 0
     private var developmentStage: String  =""
-    private var plantationYear = 1800
+    private var plantationYear = 0
 
     private lateinit var edtPlantationYear: EditText
     private lateinit var edtOutstandingQualification: EditText
