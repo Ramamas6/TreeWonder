@@ -21,11 +21,6 @@ class TreeViewHolder(rootView: View, private val listener: OnTreeClickListener):
             listener.onTreeClick(tree)
         }
         btn.setOnClickListener {
-            val currentTint = btn.backgroundTintList?.defaultColor ?: 0
-            val newTint =
-                if (currentTint == Color.parseColor("#FFFFFF")) Color.parseColor("#FFEF00")
-                else Color.parseColor("#FFFFFF")
-            btn.backgroundTintList = ColorStateList.valueOf(newTint)
             listener.onFavoriteClick(tree)
         }
     }

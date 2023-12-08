@@ -1,11 +1,14 @@
 package com.example.treewonder
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class TreeAdapter(private var trees: List<Tree>, private val clickListener: OnTreeClickListener): RecyclerView.Adapter<TreeViewHolder>(){
+class TreeAdapter(private var trees: List<Tree>, private var favoritesList: ArrayList<Int>,
+                  private val clickListener: OnTreeClickListener): RecyclerView.Adapter<TreeViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreeViewHolder {
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_tree, parent, false)
@@ -20,6 +23,10 @@ class TreeAdapter(private var trees: List<Tree>, private val clickListener: OnTr
         } else{
             Picasso.get().load(R.drawable.default_img_tree).into(holder.img)
         }
+        val newTint =
+            if(favoritesList.contains(tree.id)) Color.parseColor("#FFEF00")
+            else Color.parseColor("#FFFFFF")
+        holder.btn.backgroundTintList = ColorStateList.valueOf(newTint)
         holder.bind(tree, clickListener)
     }
 

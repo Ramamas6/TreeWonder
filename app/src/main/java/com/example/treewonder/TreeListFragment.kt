@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 private const val ARG_TREES = "param1"
+private const val ARG_FAVORITES = "param2"
 class TreeListFragment : Fragment(), OnTreeClickListener {
     private var trees: ArrayList<Tree> = arrayListOf()
+    private var favoritesList: ArrayList<Int> = arrayListOf()
     private  lateinit var treeAdapter: TreeAdapter
     private  lateinit var recyclerView: RecyclerView
 
@@ -21,6 +23,7 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         super.onCreate(savedInstanceState)
         arguments?.let {
             trees = it.getSerializable(ARG_TREES) as ArrayList<Tree>
+            favoritesList = it.getSerializable(ARG_FAVORITES) as ArrayList<Int>
         }
     }
 
@@ -28,7 +31,7 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         val view = inflater.inflate(R.layout.fragment_tree_list, container, false)
 
         recyclerView = view.findViewById(R.id.f_tree_list_rcv_trees)
-        treeAdapter = TreeAdapter(trees, this)
+        treeAdapter = TreeAdapter(trees, favoritesList, this)
         recyclerView.adapter = treeAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(
@@ -42,10 +45,11 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
 
     companion object {
         @JvmStatic
-        fun newInstance(trees: ArrayList<Tree>) =
+        fun newInstance(trees: ArrayList<Tree>, favoritesList: ArrayList<Int>) =
             TreeListFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_TREES, trees)
+                    putSerializable(ARG_FAVORITES, favoritesList)
                 }
             }
     }
@@ -54,6 +58,6 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         (activity as MainActivity).displayTreeFragment(tree)
     }
     override fun onFavoriteClick(tree: Tree) {
-        (activity as MainActivity).changeFavorites(tree.id)
+        (activity as MainActivity).changeFavorites(tree.id, true)
     }
 }

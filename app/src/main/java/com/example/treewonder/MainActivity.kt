@@ -33,7 +33,8 @@ private const val FILENAME = "favorites.txt"
 class MainActivity : AppCompatActivity() {
     // Map of trees
     private val trees = Trees()
-    // File for favorites
+    // List of favorites
+    private val favoritesList = mutableListOf<Int>()
 
     private val gson = GsonBuilder()
         .registerTypeAdapter(Tree::class.java, TreeSerializer())
@@ -53,8 +54,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val file = File(this.filesDir, FILENAME)
-        if (!file.exists()) file.appendText("10 15 20 30") // Creates the file if it doesn't exists yet
+        if (!file.exists()) file.appendText("") // Creates the file if it doesn't exists yet
 
+        initFavorites() // Initialize the list of favorites
         setUpToolBar() // Create the ToolBar menu
         setUpTabLayout() // Create the navigation bar
         displayMapFragment() // Display initial map fragment
@@ -78,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees()), "TreeListFragment")
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees(), ArrayList(favoritesList)), "TreeListFragment")
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayFavoriteFragment() {
-        val favoriteTrees = getFavoriteTrees()
+        val favoriteTrees = trees.getTrees(favoritesList)
         // Manage empty text
         val emptyText = findViewById<TextView>(R.id.a_main_empty)
         if(favoriteTrees.size == 0) {
@@ -112,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees), "FavoritesFragment")
+        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees, ArrayList(favoritesList)), "FavoritesFragment")
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
@@ -161,17 +163,11 @@ class MainActivity : AppCompatActivity() {
         return trees.getAllTrees()
     }
 
-    private fun getFavoriteTrees(): ArrayList<Tree> {
-        val favorites = File(this.filesDir, FILENAME).readText()
-        if(favorites.isEmpty()) return ArrayList<Tree>()
-        val favoritesID = favorites.dropLast(1).split(" ").map { it.toInt() }
-        return trees.getTrees(favoritesID)
-    }
-
     /** Adds or removes a tree from the favorites
      * @param id id of the tree to add/remove from favorites
+     * @param actualise whether the screen must be actualised or not afterwards
      */
-    fun changeFavorites(id: Int) {
+    fun changeFavorites(id: Int, actualise: Boolean) {
         // Read favorites
         val contents = File(this.filesDir, FILENAME).readText() // Read file
         val index = contents.indexOf("$id ")
@@ -180,12 +176,19 @@ class MainActivity : AppCompatActivity() {
             this.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
                 it.write(contents.plus("$id ").toByteArray())
             }
+            favoritesList.add(id)
         }
         // This id is already in favorites: deletes it
         else {
             this.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
                 it.write(contents.removeRange(index, index + id.toString().length + 1).toByteArray())
             }
+            favoritesList.remove(id)
+        }
+        // Actualise screen if necessary
+        if(actualise) {
+            val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+            tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
         }
     }
 
@@ -234,6 +237,12 @@ class MainActivity : AppCompatActivity() {
             })
         }
         else {Toast.makeText(this, "Unable to load data: no internet connection detected", Toast.LENGTH_SHORT).show()}
+    }
+
+    private fun initFavorites() {
+        val favorites = File(this.filesDir, FILENAME).readText()
+        if(favorites.isNotEmpty())
+            favorites.dropLast(1).split(" ").map { favoritesList.add(it.toInt()) }
     }
 
     private fun setUpToolBar() {
