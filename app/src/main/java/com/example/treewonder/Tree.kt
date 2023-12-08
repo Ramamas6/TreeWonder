@@ -43,7 +43,9 @@ class TreeSerializer : JsonSerializer<Tree> {
             treeObject.addProperty("height", src.height)
         if(src.circumference != 0)
             treeObject.addProperty("circumference", src.circumference)
+
         treeObject.addProperty("developmentStage", src.developmentStage)
+
         if(src.plantationYear != 0)
             treeObject.addProperty("plantationYear", src.plantationYear)
         if(src.outstandingQualification.isNotBlank())
@@ -58,14 +60,10 @@ class TreeSerializer : JsonSerializer<Tree> {
             treeObject.addProperty("species", src.species)
         if(src.variety.isNotBlank())
             treeObject.addProperty("variety", src.variety)
-
-        if (src.sign.isNotBlank()) {
+        if (src.sign.isNotBlank())
             treeObject.addProperty("sign", src.sign)
-        }
-
-        if (src.picture.isNotBlank()) {
+        if (src.picture.isNotBlank())
             treeObject.addProperty("picture", src.picture)
-        }
         if(src.latitude != 0.0)
             treeObject.addProperty("latitude", src.latitude)
         if(src.longitude != 0.0)

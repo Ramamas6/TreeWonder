@@ -2,7 +2,6 @@ package com.example.treewonder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
@@ -16,7 +15,11 @@ class TreeAdapter(private var trees: List<Tree>, private val clickListener: OnTr
     override fun onBindViewHolder(holder: TreeViewHolder, position: Int) {
         val tree = trees[position]
         holder.txvName.text = tree.name
-        Picasso.get().load(tree.picture).into(holder.img)
+        if (!tree.picture.isNullOrBlank()) {
+            Picasso.get().load(tree.picture).into(holder.img)
+        } else{
+            Picasso.get().load(R.drawable.default_img_tree).into(holder.img)
+        }
         holder.bind(tree, clickListener)
     }
 
