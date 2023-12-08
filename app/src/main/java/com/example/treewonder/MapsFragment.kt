@@ -13,7 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
+import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -79,8 +81,10 @@ class MapsFragment : Fragment() {
 
 
     private fun addLandMark(tree: Tree) {
-        val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.summary)
-        clusterManager.addItem(newLandMark)
+        if(tree.latitude != null && tree.longitude != null) {
+            val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.summary)
+            clusterManager.addItem(newLandMark)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

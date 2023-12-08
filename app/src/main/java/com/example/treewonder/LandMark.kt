@@ -11,7 +11,7 @@ import com.google.maps.android.clustering.ClusterItem
 import com.squareup.picasso.Picasso
 import java.util.concurrent.Executors
 
-class LandMark(lat: Double, lng: Double, title: String, snippet: String) : ClusterItem {
+class LandMark(lat: Double, lng: Double, title: String, snippet: String?) : ClusterItem {
 
     private val position: LatLng
     private val title: String
@@ -32,6 +32,6 @@ class LandMark(lat: Double, lng: Double, title: String, snippet: String) : Clust
     init {
         position = LatLng(lat, lng)
         this.title = title
-        this.snippet = snippet
+        this.snippet = snippet ?: ""
     }
 }
