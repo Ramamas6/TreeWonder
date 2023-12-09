@@ -37,6 +37,7 @@ class MapsFragment : Fragment() {
     private lateinit var clusterManager: ClusterManager<LandMark>
     // Used to manage the case when treeData from API is ready before the map
     private var treeInit = false
+    private var initialPosition: LatLng? = null
 
     private val callback = OnMapReadyCallback { map ->
         googleMap = map
@@ -44,29 +45,9 @@ class MapsFragment : Fragment() {
         clusterManager = ClusterManager(context, googleMap)
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
-        // Setup default camera
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
-        val paris = LatLng(48.8589384,2.2646343)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(paris))
         // Set camera on localisation
-        getLocation(this.requireActivity()) { result ->
-            if (result != null) {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(result))
-                googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
-            }
-            else {}
-        }
-
+        setCameraOnLocation(initialPosition)
         // Add markers
-        val myExecutor = Executors.newSingleThreadExecutor()
-        val myHandler = Handler(Looper.getMainLooper())
-        myExecutor.execute {
-            val imageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg"
-            val bitmapImage = Picasso.get().load(imageUrl).resize(100, 200).get()
-            myHandler.post {
-                googleMap.addMarker(MarkerOptions().position(paris).title("Paris").icon(BitmapDescriptorFactory.fromBitmap(bitmapImage)))
-            }
-        }
         if(treeInit) {
             // tree data from API was ready before: we have to add them now
             var trees = (activity as MainActivity).getTrees()
@@ -101,13 +82,26 @@ class MapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
     }
 
-    fun setCameraOnLocation() {
-        getLocation(this.requireActivity()) { result ->
-            if (result != null) {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(result))
-                googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+    fun setCameraOnLocation(loc: LatLng? = null) {
+        if(loc == null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(48.8589384,2.2646343)))
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+            getLocation(this.requireActivity()) { result ->
+                if (result != null) {
+                    googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(result))
+                }
             }
-            else {}
+        }
+        else {
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
+
         }
     }
+
+    fun setInitialPosition(loc: LatLng?) {
+        initialPosition = loc
+    }
+
 }

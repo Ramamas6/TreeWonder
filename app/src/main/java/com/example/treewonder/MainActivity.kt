@@ -47,7 +47,9 @@ class MainActivity : AppCompatActivity() {
     private val treeService = retrofit.create(TreeService::class.java)
 
     // Needed to send it the result of RequestPermissions for localisation
-    private var mapFragment: MapsFragment = MapsFragment()
+    private val mapFragment: MapsFragment = MapsFragment()
+    private var initialPosition: LatLng? = null
+    private var listPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         initFavorites() // Initialize the list of favorites
         setUpToolBar() // Create the ToolBar menu
         setUpTabLayout() // Create the navigation bar
-        displayMapFragment() // Display initial map fragment
         initData() // Load the trees from the API
     }
 
@@ -76,8 +77,11 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(trees.getAllTrees(), ArrayList(favoritesList)), "TreeListFragment")
+        transaction.replace(R.id.a_main_fragment,
+            TreeListFragment.newInstance(trees.getAllTrees(), ArrayList(favoritesList)),
+            "TreeListFragment")
         transaction.commit()
+        listPosition = 0
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
@@ -89,8 +93,10 @@ class MainActivity : AppCompatActivity() {
     private fun displayMapFragment(){
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
+        mapFragment.setInitialPosition(initialPosition)
         transaction.replace(R.id.a_main_fragment, mapFragment, "MapsFragment")
         transaction.commit()
+        initialPosition = null
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
@@ -108,8 +114,12 @@ class MainActivity : AppCompatActivity() {
         else {emptyText.visibility = View.GONE}
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeListFragment.newInstance(favoriteTrees, ArrayList(favoritesList)), "FavoritesFragment")
+        transaction.replace(
+            R.id.a_main_fragment,
+            TreeListFragment.newInstance(favoriteTrees, ArrayList(favoritesList)),
+            "FavoritesFragment")
         transaction.commit()
+        listPosition = 0
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
@@ -148,7 +158,7 @@ class MainActivity : AppCompatActivity() {
      * @param id id of the tree to add/remove from favorites
      * @param actualise whether the screen must be actualised or not afterwards
      */
-    fun changeFavorites(id: Int, actualise: Boolean) {
+    fun changeFavorites(id: Int, actualise: Boolean, lastPosition: Int = 0) {
         // Read favorites
         val contents = File(this.filesDir, FILENAME).readText() // Read file
         val index = contents.indexOf("$id ")
@@ -168,6 +178,7 @@ class MainActivity : AppCompatActivity() {
         }
         // Actualise screen if necessary
         if(actualise) {
+            listPosition = lastPosition
             val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
             tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
         }
@@ -220,7 +231,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun teleportToPosition(loc: LatLng?) {
-        displayMapFragment()
+        initialPosition = loc
+        val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+        tabLayout.selectTab(tabLayout.getTabAt(1))
     }
 
     /**
@@ -239,7 +252,8 @@ class MainActivity : AppCompatActivity() {
                         if(treeFromServer != null) {
                             trees.addTree(treeFromServer)
                         }
-                        displayMapFragment()
+                        val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
                     }
                     onFailure = {
                         Toast.makeText(this@MainActivity, it?.message, Toast.LENGTH_SHORT).show()

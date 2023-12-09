@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 private const val ARG_TREES = "param1"
 private const val ARG_FAVORITES = "param2"
+private const val ARG_POSITION = "param3"
 class TreeListFragment : Fragment(), OnTreeClickListener {
     private var trees: ArrayList<Tree> = arrayListOf()
     private var favoritesList: ArrayList<Int> = arrayListOf()
+    private var initialPosition: Int = 0
     private  lateinit var treeAdapter: TreeAdapter
     private  lateinit var recyclerView: RecyclerView
 
@@ -24,6 +26,7 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         arguments?.let {
             trees = it.getSerializable(ARG_TREES) as ArrayList<Tree>
             favoritesList = it.getSerializable(ARG_FAVORITES) as ArrayList<Int>
+            //initialPosition = it.getSerializable(ARG_POSITION) as Int
         }
     }
 
@@ -40,16 +43,18 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
                 DividerItemDecoration.VERTICAL
             )
         )
+        recyclerView.scrollToPosition(initialPosition)
         return view
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(trees: ArrayList<Tree>, favoritesList: ArrayList<Int>) =
+        fun newInstance(trees: ArrayList<Tree>, favoritesList: ArrayList<Int>) = //, initialPosition: Int
             TreeListFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_TREES, trees)
                     putSerializable(ARG_FAVORITES, favoritesList)
+                    //putSerializable(ARG_POSITION, initialPosition)
                 }
             }
     }
@@ -58,6 +63,7 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         (activity as MainActivity).displayTreeFragment(tree)
     }
     override fun onFavoriteClick(tree: Tree) {
-        (activity as MainActivity).changeFavorites(tree.id, true)
+        val currentPosition = recyclerView.getChildAdapterPosition(recyclerView.getChildAt(0))
+        (activity as MainActivity).changeFavorites(tree.id, true, currentPosition)
     }
 }

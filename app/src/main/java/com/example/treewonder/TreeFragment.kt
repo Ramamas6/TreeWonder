@@ -50,7 +50,9 @@ class TreeFragment : Fragment() {
         // Handle button map
         val btnMap = view.findViewById<FloatingActionButton>(R.id.f_tree_btn_map)
         btnMap.setOnClickListener{
-            Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
+            if(tree.latitude == 0.0 && tree.longitude == 0.0)
+                Toast.makeText(context, "Impossible to show on map : latitude and longitude undefined", Toast.LENGTH_SHORT).show()
+            else (activity as MainActivity).teleportToPosition(LatLng(tree.latitude, tree.longitude))
         }
 
         // Handle button edit
