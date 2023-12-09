@@ -44,7 +44,7 @@
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@drawable/baseline_star_border_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

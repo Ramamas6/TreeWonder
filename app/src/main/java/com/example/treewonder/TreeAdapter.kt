@@ -23,10 +23,8 @@ class TreeAdapter(private var trees: List<Tree>, private var favoritesList: Arra
         } else{
             Picasso.get().load(R.drawable.default_img_tree).into(holder.img)
         }
-        val newTint =
-            if(favoritesList.contains(tree.id)) Color.parseColor("#FFEF00")
-            else Color.parseColor("#FFFFFF")
-        holder.btn.backgroundTintList = ColorStateList.valueOf(newTint)
+        if(favoritesList.contains(tree.id)) holder.btn.setImageResource(R.drawable.baseline_star_24)
+        else holder.btn.setImageResource(R.drawable.baseline_star_border_24)
         holder.bind(tree, clickListener)
     }
 
