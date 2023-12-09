@@ -43,9 +43,8 @@ class TreeSerializer : JsonSerializer<Tree> {
             treeObject.addProperty("height", src.height)
         if(src.circumference != 0)
             treeObject.addProperty("circumference", src.circumference)
-
-        treeObject.addProperty("developmentStage", src.developmentStage)
-
+        if(src.developmentStage.isNotBlank())
+            treeObject.addProperty("developmentStage", src.developmentStage)
         if(src.plantationYear != 0)
             treeObject.addProperty("plantationYear", src.plantationYear)
         if(src.outstandingQualification.isNotBlank())

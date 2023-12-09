@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.GsonBuilder
@@ -59,9 +60,6 @@ class MainActivity : AppCompatActivity() {
         setUpTabLayout() // Create the navigation bar
         displayMapFragment() // Display initial map fragment
         initData() // Load the trees from the API
-
-
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -221,6 +219,10 @@ class MainActivity : AppCompatActivity() {
         return trees.getAllTrees()
     }
 
+    fun teleportToPosition(loc: LatLng?) {
+        displayMapFragment()
+    }
+
     /**
      * Get the result of an activity
      */
@@ -320,7 +322,7 @@ class MainActivity : AppCompatActivity() {
         /** Localisation permission **/
         if (requestCode == 2) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(this, "Thank you, your location was sold for \$4 on the dark web", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Thank you, your location was sold on the dark web", Toast.LENGTH_SHORT).show()
                 // Case map fragment open : set camera on localisation
                 if (supportFragmentManager.findFragmentByTag("MapsFragment") as? MapsFragment != null)
                     mapFragment.setCameraOnLocation()
