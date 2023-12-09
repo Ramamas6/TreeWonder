@@ -146,6 +146,8 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.a_main_fragment, TreeFragment.newInstance(tree), "TreeFragment")
         transaction.commit()
+        val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
+        fragmentButton.visibility = View.GONE
     }
 
     /** Adds or removes a tree from the favorites

@@ -1,5 +1,6 @@
 package com.example.treewonder
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ class TreeFragment : Fragment() {
 
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tree, container, false)
 
@@ -34,7 +36,7 @@ class TreeFragment : Fragment() {
         view.findViewById<TextView>(R.id.f_tree_text_name).text = tree.name
         view.findViewById<TextView>(R.id.f_tree_text_commonName).text = tree.commonName
         view.findViewById<TextView>(R.id.f_tree_text_height).text = tree.height.toString()
-        view.findViewById<TextView>(R.id.f_tree_text_cirumference).text = tree.circumference.toString()
+        view.findViewById<TextView>(R.id.f_tree_text_circumference).text = tree.circumference.toString()
 
         view.findViewById<TextView>(R.id.f_tree_text_description).text = tree.description
 
