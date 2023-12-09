@@ -31,6 +31,10 @@ class Trees {
         return storage.size
     }
 
+    fun remove(id: Int) {
+        storage.remove(id)
+    }
+
     fun clear() {
         storage.clear()
     }

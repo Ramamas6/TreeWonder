@@ -86,7 +86,7 @@ class MapsFragment : Fragment() {
 
     private fun addLandMark(tree: Tree) {
         if(tree.latitude != null && tree.longitude != null) {
-            val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.summary)
+            val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.outstandingQualification)
             clusterManager.addItem(newLandMark)
         }
     }

@@ -4,7 +4,6 @@ package com.example.treewonder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -15,7 +14,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.GsonBuilder
@@ -84,7 +82,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
         fragmentButton.setOnClickListener{
             Toast.makeText(this, "SEARCH TODO", Toast.LENGTH_SHORT).show()
@@ -98,7 +95,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
         fragmentButton.setOnClickListener{mapFragment.setCameraOnLocation()}
     }
@@ -118,7 +114,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.VISIBLE
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
         fragmentButton.setOnClickListener { deleteFavorites() }
     }
@@ -132,7 +127,6 @@ class MainActivity : AppCompatActivity() {
             transaction.commit()
             // Manage button
             val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-            fragmentButton.visibility = View.VISIBLE
             fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
             fragmentButton.setOnClickListener { deleteLocalData() }
         }
@@ -144,10 +138,12 @@ class MainActivity : AppCompatActivity() {
 
     fun displayTreeFragment(tree: Tree) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.a_main_fragment, TreeFragment.newInstance(tree), "TreeFragment")
+        transaction.replace(R.id.a_main_fragment, TreeFragment.newInstance(tree, favoritesList.contains(tree.id)), "TreeFragment")
         transaction.commit()
+        // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.visibility = View.GONE
+        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+        fragmentButton.setOnClickListener { deleteTree(tree.id) }
     }
 
     /** Adds or removes a tree from the favorites
@@ -189,6 +185,19 @@ class MainActivity : AppCompatActivity() {
                     it.write("".toByteArray())
                     displayFavoriteFragment()
                 }
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
+        val alert = builder.create()
+        alert.show()
+    }
+
+    private fun deleteTree(id: Int) {
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Are you sure you want to delete this tree (only locally) ?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                trees.remove(id)
+                displayListFragment()
             }
             .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
         val alert = builder.create()
