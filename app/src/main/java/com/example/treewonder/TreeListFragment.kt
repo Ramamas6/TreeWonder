@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 private const val ARG_TREES = "param1"
 private const val ARG_FAVORITES = "param2"
 private const val ARG_POSITION = "param3"
+private const val ARG_TYPE = "param4"
 class TreeListFragment : Fragment(), OnTreeClickListener {
     private var trees: ArrayList<Tree> = arrayListOf()
     private var favoritesList: ArrayList<Int> = arrayListOf()
     private var initialPosition: Int = 0
+    private var isGeneralList = true
     private  lateinit var treeAdapter: TreeAdapter
     private  lateinit var recyclerView: RecyclerView
 
@@ -26,7 +28,8 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
         arguments?.let {
             trees = it.getSerializable(ARG_TREES) as ArrayList<Tree>
             favoritesList = it.getSerializable(ARG_FAVORITES) as ArrayList<Int>
-            //initialPosition = it.getSerializable(ARG_POSITION) as Int
+            initialPosition = it.getSerializable(ARG_POSITION) as Int
+            isGeneralList = it.getSerializable(ARG_TYPE) as Boolean
         }
     }
 
@@ -49,12 +52,14 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
 
     companion object {
         @JvmStatic
-        fun newInstance(trees: ArrayList<Tree>, favoritesList: ArrayList<Int>) = //, initialPosition: Int
+        fun newInstance(trees: ArrayList<Tree>, favoritesList: ArrayList<Int>,
+                        initialPosition: Int, isGeneralList: Boolean) =
             TreeListFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_TREES, trees)
                     putSerializable(ARG_FAVORITES, favoritesList)
-                    //putSerializable(ARG_POSITION, initialPosition)
+                    putSerializable(ARG_POSITION, initialPosition)
+                    putSerializable(ARG_TYPE, isGeneralList)
                 }
             }
     }
@@ -64,6 +69,6 @@ class TreeListFragment : Fragment(), OnTreeClickListener {
     }
     override fun onFavoriteClick(tree: Tree) {
         val currentPosition = recyclerView.getChildAdapterPosition(recyclerView.getChildAt(0))
-        (activity as MainActivity).changeFavorites(tree.id, true, currentPosition)
+        (activity as MainActivity).changeFavorites(tree.id, !isGeneralList, currentPosition)
     }
 }

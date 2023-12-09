@@ -1,7 +1,5 @@
 package com.example.treewonder
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,6 +19,10 @@ class TreeViewHolder(rootView: View, private val listener: OnTreeClickListener):
             listener.onTreeClick(tree)
         }
         btn.setOnClickListener {
+            val isFavorite = btn.getTag(R.id.is_favorite) as Int
+            if(isFavorite == 1) btn.setImageResource(R.drawable.baseline_star_border_24)
+            else btn.setImageResource(R.drawable.baseline_star_24)
+            btn.setTag(R.id.is_favorite, 1 - isFavorite)
             listener.onFavoriteClick(tree)
         }
     }

@@ -78,10 +78,9 @@ class MainActivity : AppCompatActivity() {
         // Display fragment
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.a_main_fragment,
-            TreeListFragment.newInstance(trees.getAllTrees(), ArrayList(favoritesList)),
+            TreeListFragment.newInstance(trees.getAllTrees(), ArrayList(favoritesList), 0, true),
             "TreeListFragment")
         transaction.commit()
-        listPosition = 0
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.a_main_fragment,
-            TreeListFragment.newInstance(favoriteTrees, ArrayList(favoritesList)),
+            TreeListFragment.newInstance(favoriteTrees, ArrayList(favoritesList), listPosition, false),
             "FavoritesFragment")
         transaction.commit()
         listPosition = 0

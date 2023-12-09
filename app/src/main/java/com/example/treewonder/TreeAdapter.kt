@@ -1,7 +1,5 @@
 package com.example.treewonder
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +21,14 @@ class TreeAdapter(private var trees: List<Tree>, private var favoritesList: Arra
         } else{
             Picasso.get().load(R.drawable.default_img_tree).into(holder.img)
         }
-        if(favoritesList.contains(tree.id)) holder.btn.setImageResource(R.drawable.baseline_star_24)
-        else holder.btn.setImageResource(R.drawable.baseline_star_border_24)
+        if(favoritesList.contains(tree.id)) {
+            holder.btn.setImageResource(R.drawable.baseline_star_24)
+            holder.btn.setTag(R.id.is_favorite, 1)
+        }
+        else {
+            holder.btn.setImageResource(R.drawable.baseline_star_border_24)
+            holder.btn.setTag(R.id.is_favorite, 0)
+        }
         holder.bind(tree, clickListener)
     }
 
