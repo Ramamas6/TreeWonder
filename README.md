@@ -1,5 +1,7 @@
 # TreeWonder
 
+Android application for discovering trees.
+
 Backend : https://github.com/Victor804/treewonderserver
 
 The main activity is displayed by default.
