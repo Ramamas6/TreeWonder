@@ -21,6 +21,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.GsonBuilder
+import com.ismin.treewonder.createTree.CreateTreeActivity
+import com.ismin.treewonder.createTree.TREE_KEY
+import com.ismin.treewonder.mainFragments.MapsFragment
+import com.ismin.treewonder.mainFragments.SettingsFragment
+import com.ismin.treewonder.mainFragments.TreeFragment
+import com.ismin.treewonder.mainFragments.TreeListFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

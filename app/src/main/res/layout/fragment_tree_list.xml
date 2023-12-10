@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TreeListFragment">
+    tools:context=".mainFragments.TreeListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/f_tree_list_rcv_trees"

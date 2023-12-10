@@ -1,7 +1,9 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.createTree
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
 
 
 const val TREE_KEY = "tree-key"

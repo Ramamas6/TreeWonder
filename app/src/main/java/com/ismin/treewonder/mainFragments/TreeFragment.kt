@@ -1,4 +1,4 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.ismin.treewonder.MainActivity
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
 import com.squareup.picasso.Picasso
 
 

@@ -1,10 +1,12 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
 
 class TreeViewHolder(rootView: View, private val listener: OnTreeClickListener): RecyclerView.ViewHolder(rootView) {
     var txvName = rootView.findViewById<TextView>(R.id.r_tree_txv_name)!!

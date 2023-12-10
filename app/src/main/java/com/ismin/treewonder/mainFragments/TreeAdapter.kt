@@ -1,8 +1,10 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
 import com.squareup.picasso.Picasso
 
 class TreeAdapter(private var trees: List<Tree>, private var favoritesList: ArrayList<Int>,

@@ -25,7 +25,7 @@
             android:value="AIzaSyB7ZfKvqMSO7alMGTdbiWFlaL2IAD6juiE" />
 
         <activity
-            android:name=".CreateTreeActivity"
+            android:name=".createTree.CreateTreeActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

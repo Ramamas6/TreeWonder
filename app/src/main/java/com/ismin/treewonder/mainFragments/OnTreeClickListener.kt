@@ -1,4 +1,6 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
+
+import com.ismin.treewonder.Tree
 
 interface OnTreeClickListener {
     fun onTreeClick(tree: Tree)

@@ -1,4 +1,4 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem

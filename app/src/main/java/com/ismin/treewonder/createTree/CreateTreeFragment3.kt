@@ -1,4 +1,4 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.createTree
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,8 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
 
 
 class CreateTreeFragment3 : Fragment(), OnMapReadyCallback {

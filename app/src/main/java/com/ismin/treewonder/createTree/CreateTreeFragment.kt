@@ -1,4 +1,4 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.createTree
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.ismin.treewonder.R
 
 class CreateTreeFragment: Fragment() {
 

@@ -1,4 +1,4 @@
-package com.ismin.treewonder
+package com.ismin.treewonder.mainFragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,6 +12,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterManager
+import com.ismin.treewonder.MainActivity
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
+import com.ismin.treewonder.getLocation
 
 
 class MapsFragment : Fragment() {
