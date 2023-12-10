@@ -234,7 +234,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:contentDescription="Button 3"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@android:drawable/ic_menu_edit"
+            android:visibility="invisible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/f_tree_btn_delete"

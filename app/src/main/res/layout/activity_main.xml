@@ -117,4 +117,22 @@
         app:layout_constraintVertical_bias="0.965"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
+    <EditText
+        android:id="@+id/a_main_search"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="#E9DCFE"
+        android:ems="10"
+        android:hint="search"
+        android:inputType="text"
+        android:textColor="#71589D"
+        android:textColorHint="#71589D"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/f_main_btn"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.966" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

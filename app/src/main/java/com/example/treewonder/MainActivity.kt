@@ -8,6 +8,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -84,9 +87,30 @@ class MainActivity : AppCompatActivity() {
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
+        val searchBar = findViewById<EditText>(R.id.a_main_search)
         fragmentButton.setOnClickListener{
-            Toast.makeText(this, "SEARCH TODO", Toast.LENGTH_SHORT).show()
+            if(searchBar.visibility == View.INVISIBLE) searchBar.visibility = View.VISIBLE
+            else searchBar.visibility = View.INVISIBLE
         }
+        searchBar.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) searchInList(searchBar) }
+        searchBar.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(searchBar.windowToken, 0)
+                searchInList(searchBar)
+                true
+            } else false
+        }
+    }
+
+    private fun searchInList(searchBar: EditText) {
+        searchBar.visibility = View.INVISIBLE
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.a_main_fragment,
+            TreeListFragment.newInstance(trees.getAllTrees(searchBar.text.toString()),
+                ArrayList(favoritesList), 0, true),
+            "TreeListFragment")
+        transaction.commit()
     }
 
     private fun displayMapFragment(){
@@ -100,6 +124,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
         fragmentButton.setOnClickListener{mapFragment.setCameraOnLocation()}
+        findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
 
     private fun displayFavoriteFragment() {
@@ -123,6 +148,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
         fragmentButton.setOnClickListener { deleteFavorites() }
+        findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
 
     private fun displaySettingsFragment() {
@@ -136,6 +162,7 @@ class MainActivity : AppCompatActivity() {
             val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
             fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
             fragmentButton.setOnClickListener { deleteLocalData() }
+            findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
         }
         else {
             val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
@@ -151,6 +178,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
         fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
         fragmentButton.setOnClickListener { deleteTree(tree.id) }
+        findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
 
     /** Adds or removes a tree from the favorites
@@ -255,6 +283,8 @@ class MainActivity : AppCompatActivity() {
                         tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
                     }
                     onFailure = {
+                        val tabLayout = findViewById<TabLayout>(R.id.a_main_tabs)
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition))
                         Toast.makeText(this@MainActivity, it?.message, Toast.LENGTH_SHORT).show()
                     }
                 }
