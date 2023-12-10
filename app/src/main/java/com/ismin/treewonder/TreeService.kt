@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import retrofit2.Call
 import retrofit2.http.Body

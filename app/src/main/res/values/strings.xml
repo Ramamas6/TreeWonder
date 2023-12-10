@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">TreeWonder</string>
 
-    <string name="create_tree_title">Add Tree</string>
-    <string name="create_tree_next">Next</string>
-    <string name="create_tree_save">Save</string>
     <string name="SettingsFragment">\n<big><b>Info générales sur l\'application :</b></big>\n
         \n<b>- URL des données :</b>\n
             <i>treewonder.cleverapps.io/trees</i>\n
@@ -11,5 +8,36 @@
             <i>public.opendatasoft.com/explore/dataset/arbresremarquablesparis2011/table/</i>\n
         "
     </string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="CreateTreeFragment_txtNameError">Please enter a value</string>
+    <string name="favorites_empty">Hmmmm... Your favourites look pretty empty</string>
+    <string name="TreeFragment_botanic_name">Botanic name: %1$s</string>
+    <string name="TreeFragment_type">Type: %1$s</string>
+    <string name="TreeFragment_species">Species: %1$s</string>
+    <string name="TreeFragment_variety">Variety: %1$s</string>
+    <string name="TreeFragment_address">Address: %1$s</string>
+    <string name="TreeFragment_latitude">Latitude: %1$s</string>
+    <string name="TreeFragment_longitude">Longitude: %1$s</string>
+    <string name="TreeFragment_unknown_height">Unknown height</string>
+    <string name="TreeFragment_unknown_age">Unknown age</string>
+    <string name="TreeFragment_unknown_circumference">Unknown circumference</string>
+    <string name="TreeFragment_impossibleMap">Impossible to show on map : latitude and longitude undefined</string>
+    <string name="not_implemented">Not implemented</string>
+    <string name="TreeFragment_height">Height: %1$s meters</string>
+    <string name="TreeFragment_age">Age: %1$s years old (%2$s)</string>
+    <string name="TreeFragment_circumference">Circumference: %1$s centimeters</string>
+    <string name="MainActivity_deleteTree">Are you sure you want to delete this tree (only locally) ?</string>
+    <string name="MainActivity_deleteAllTrees">Are you sure you want to delete all the trees currently stored in the app ?</string>
+    <string name="MainActivity_deleteAllTress_confirmation">All trees have been locally deleted</string>
+    <string name="MainActivity_deleteFavorites">Are you sure you want to delete all your favorites ?</string>
+    <string name="MainActivity_noInternet">Unable to load data: no internet connection detected</string>
+    <string name="MainActivity_noTreesInList">oops ! It seem there is no tree to display...\nPlease use the refresh button or contact the administrators if this doesn\'t work.</string>
+    <string name="MainActivity_noInternetInList">Oops! It looks like you don\'t have an internet connection...\nPlease activate the connection and use the refresh button.</string>
+    <string name="layoutActivityMain_settingsButtonDescription">Open settings</string>
+    <string name="layoutActivityMain_actualiseButtonDescription">Update data</string>
+    <string name="layoutActivityMain_newTreeButtonDescription">Create a new tree</string>
+    <string name="layoutActivityMain_searchHint">search</string>
+    <string name="layoutActivityMain_mainButtonDescription">Main action on all fragments (opens search bar, refocuses on location, etc.)</string>
+    <string name="layoutActivityMain_navigationMenuDescription">Navigation menu</string>
+    <string name="rowTree_imageDescription">Image of the tree</string>
+    <string name="rowTree_favoriteButtonDescription">Add or remove this tree from favorites</string>
 </resources>

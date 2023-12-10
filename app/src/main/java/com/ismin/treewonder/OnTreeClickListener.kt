@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 interface OnTreeClickListener {
     fun onTreeClick(tree: Tree)

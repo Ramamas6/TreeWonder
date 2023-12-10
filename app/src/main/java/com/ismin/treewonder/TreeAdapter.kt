@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 class TreeAdapter(private var trees: List<Tree>, private var favoritesList: ArrayList<Int>,
-                  private val clickListener: OnTreeClickListener): RecyclerView.Adapter<TreeViewHolder>(){
+                  private val clickListener: OnTreeClickListener
+): RecyclerView.Adapter<TreeViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreeViewHolder {
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_tree, parent, false)
@@ -29,7 +30,7 @@ class TreeAdapter(private var trees: List<Tree>, private var favoritesList: Arra
             holder.btn.setImageResource(R.drawable.baseline_star_border_24)
             holder.btn.setTag(R.id.is_favorite, 0)
         }
-        holder.bind(tree, clickListener)
+        holder.bind(tree)
     }
 
     override fun getItemCount(): Int {

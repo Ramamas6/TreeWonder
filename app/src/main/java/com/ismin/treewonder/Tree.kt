@@ -1,11 +1,9 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.io.Serializable
-import java.lang.reflect.Type
 
 
 data class Tree(

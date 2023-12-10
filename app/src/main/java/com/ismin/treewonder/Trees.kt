@@ -1,6 +1,4 @@
-package com.example.treewonder
-
-import android.widget.Toast
+package com.ismin.treewonder
 
 class Trees {
     private val storage = HashMap<Int, Tree>()
@@ -11,10 +9,6 @@ class Trees {
 
     fun addTrees(trees: List<Tree>){
         trees.forEach{tree -> addTree(tree)}
-    }
-
-    fun getTree(id: Int): Tree {
-        return storage[id] ?: throw IllegalAccessException("Unknown name")
     }
 
     /**

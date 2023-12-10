@@ -6,9 +6,5 @@
     </style>
 
     <style name="Theme.TreeWonder" parent="Base.Theme.TreeWonder" />
-    
-    <style name="DefaultTextStyle">
-        <item name="android:textColor">@color/lightGray</item>
-    </style>
 
 </resources>

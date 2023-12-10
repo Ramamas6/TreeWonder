@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import org.junit.Test
 

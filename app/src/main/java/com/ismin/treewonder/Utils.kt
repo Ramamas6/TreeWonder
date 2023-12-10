@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import android.Manifest
 import android.app.Activity
@@ -8,7 +8,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationServices
@@ -47,7 +46,7 @@ class CallBackKt<T>: Callback<T> {
  */
 
 fun getLocation(activity: Activity, callback: (LatLng?) -> Unit) {
-    var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+    val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
         if (isLocationEnabled(activity)) {
             mFusedLocationClient.lastLocation.addOnCompleteListener(activity) { task ->
@@ -85,18 +84,11 @@ private fun isLocationEnabled(activity: Activity): Boolean {
  */
 fun isInternetEnabled(context: Context): Boolean {
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = connectivityManager.activeNetwork ?: return false
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return when {
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            else -> false
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-        @Suppress("DEPRECATION")
-        return networkInfo.isConnected
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        else -> false
     }
 }

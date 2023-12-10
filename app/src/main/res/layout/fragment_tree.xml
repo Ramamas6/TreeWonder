@@ -8,7 +8,6 @@
     android:padding="8dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -89,7 +88,6 @@
                 android:layout_height="4dp" />
 
             <View
-                android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider" />
@@ -117,7 +115,6 @@
                 android:layout_height="4dp" />
 
             <View
-                android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider" />
@@ -163,7 +160,6 @@
                 android:layout_height="4dp" />
 
             <View
-                android:id="@+id/divider3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider" />
@@ -238,7 +234,6 @@
             android:visibility="invisible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/f_tree_btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

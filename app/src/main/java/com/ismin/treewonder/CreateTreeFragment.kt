@@ -1,6 +1,5 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,8 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CreateTreeFragment: Fragment() {
 
@@ -91,7 +88,7 @@ class CreateTreeFragment: Fragment() {
                 transaction.commit()
             }
             else{
-                txtNameError.text = "Please enter a value"
+                txtNameError.text = getString(R.string.CreateTreeFragment_txtNameError)
             }
 
         }

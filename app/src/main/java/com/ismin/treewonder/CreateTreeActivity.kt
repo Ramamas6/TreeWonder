@@ -1,12 +1,7 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 const val TREE_KEY = "tree-key"

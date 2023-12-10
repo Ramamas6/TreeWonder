@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/a_main_toolbar_constraint"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" >
@@ -40,12 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/a_main_toolbar"
                 app:layout_constraintHorizontal_bias="0.971"
                 app:layout_constraintStart_toEndOf="@+id/a_main_btn_update"
                 app:layout_constraintTop_toTopOf="@+id/a_main_toolbar"
-                app:srcCompat="@android:drawable/ic_menu_manage" />
+                app:srcCompat="@android:drawable/ic_menu_manage"
+                android:contentDescription="@string/layoutActivityMain_settingsButtonDescription" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/a_main_btn_update"
@@ -53,10 +53,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/a_main_btn_create_tree"
                 app:layout_constraintTop_toTopOf="@+id/a_main_toolbar"
-                app:srcCompat="@android:drawable/ic_popup_sync" />
+                app:srcCompat="@android:drawable/ic_popup_sync"
+                android:contentDescription="@string/layoutActivityMain_actualiseButtonDescription" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/a_main_btn_create_tree"
@@ -64,10 +66,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="220dp"
                 android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/a_main_toolbar"
                 app:layout_constraintTop_toTopOf="@+id/a_main_toolbar"
-                app:srcCompat="@drawable/baseline_add_24" />
+                app:srcCompat="@drawable/baseline_add_24"
+                android:contentDescription="@string/layoutActivityMain_newTreeButtonDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +82,8 @@
             app:tabBackground="@android:color/white"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabTextColor="@color/darkGray" />
+            app:tabTextColor="@color/darkGray"
+            android:contentDescription="@string/layoutActivityMain_navigationMenuDescription"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -109,13 +114,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.909"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.965"
-        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+        app:srcCompat="@android:drawable/ic_menu_mylocation"
+        android:contentDescription="@string/layoutActivityMain_mainButtonDescription" />
 
     <EditText
         android:id="@+id/a_main_search"
@@ -123,7 +130,7 @@
         android:layout_height="50dp"
         android:background="#E9DCFE"
         android:ems="10"
-        android:hint="search"
+        android:hint="@string/layoutActivityMain_searchHint"
         android:inputType="text"
         android:textColor="#71589D"
         android:textColorHint="#71589D"
@@ -133,6 +140,7 @@
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.966" />
+        app:layout_constraintVertical_bias="0.966"
+        android:importantForAutofill="no" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 
 import android.annotation.SuppressLint
@@ -73,9 +73,9 @@ class MainActivity : AppCompatActivity() {
         if(trees.size() == 0) {
             emptyText.visibility = View.VISIBLE
             if(isInternetEnabled(this))
-                emptyText.text = "oops ! It seem there is no tree to display...\nPlease use the refresh button or contact the administrators if this doesn't work."
+                emptyText.text = getString(R.string.MainActivity_noTreesInList)
             else
-                emptyText.text = "Oops! It looks like you don't have an internet connection...\nPlease activate the connection and use the refresh button."
+                emptyText.text = getString(R.string.MainActivity_noInternetInList)
         }
         else {emptyText.visibility = View.GONE}
         // Display fragment
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_search", null, null))
+        fragmentButton.setImageResource(R.drawable.ic_menu_search)
         val searchBar = findViewById<EditText>(R.id.a_main_search)
         fragmentButton.setOnClickListener{
             if(searchBar.visibility == View.INVISIBLE) searchBar.visibility = View.VISIBLE
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         initialPosition = null
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_mylocation", null, null))
+        fragmentButton.setImageResource(R.drawable.ic_menu_mylocation)
         fragmentButton.setOnClickListener{mapFragment.setCameraOnLocation()}
         findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         val emptyText = findViewById<TextView>(R.id.a_main_empty)
         if(favoriteTrees.size == 0) {
             emptyText.visibility = View.VISIBLE
-            emptyText.text = "Hmmmm... Your favourites look pretty empty"
+            emptyText.text = getString(R.string.favorites_empty)
         }
         else {emptyText.visibility = View.GONE}
         // Display fragment
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         listPosition = 0
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+        fragmentButton.setImageResource(R.drawable.ic_menu_delete)
         fragmentButton.setOnClickListener { deleteFavorites() }
         findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             transaction.commit()
             // Manage button
             val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-            fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+            fragmentButton.setImageResource(R.drawable.ic_menu_delete)
             fragmentButton.setOnClickListener { deleteLocalData() }
             findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
         }
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
         // Manage button
         val fragmentButton = findViewById<FloatingActionButton>(R.id.f_main_btn)
-        fragmentButton.setImageResource(resources.getIdentifier("@android:drawable/ic_menu_delete", null, null))
+        fragmentButton.setImageResource(R.drawable.ic_menu_delete)
         fragmentButton.setOnClickListener { deleteTree(tree.id) }
         findViewById<EditText>(R.id.a_main_search).visibility = View.INVISIBLE
     }
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteFavorites() {
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setMessage("Are you sure you want to delete all your favorites ?")
+        builder.setMessage(getString(R.string.MainActivity_deleteFavorites))
             .setCancelable(false)
             .setPositiveButton("Yes") { _, _ ->
                 favoritesList.clear()
@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteTree(id: Int) {
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setMessage("Are you sure you want to delete this tree (only locally) ?")
+        builder.setMessage(getString(R.string.MainActivity_deleteTree))
             .setCancelable(false)
             .setPositiveButton("Yes") { _, _ ->
                 trees.remove(id)
@@ -242,11 +242,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteLocalData() {
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setMessage("Are you sure you want to delete all the trees currently stored in the app ?")
+        builder.setMessage(getString(R.string.MainActivity_deleteAllTrees))
             .setCancelable(false)
             .setPositiveButton("Yes") { _, _ ->
                 trees.clear()
-                Toast.makeText(this, "All trees have been locally deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.MainActivity_deleteAllTress_confirmation), Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("No") { dialog, _ -> dialog.dismiss()}
         val alert = builder.create()
@@ -310,7 +311,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
-        else {Toast.makeText(this, "Unable to load data: no internet connection detected", Toast.LENGTH_SHORT).show()}
+        else {Toast.makeText(this, getString(R.string.MainActivity_noInternet), Toast.LENGTH_SHORT).show()}
     }
 
     private fun initFavorites() {

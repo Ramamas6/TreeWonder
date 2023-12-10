@@ -1,15 +1,7 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
-import android.graphics.Bitmap
-import android.os.Handler
-import android.os.Looper
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterItem
-import com.squareup.picasso.Picasso
-import java.util.concurrent.Executors
 
 class LandMark(lat: Double, lng: Double, title: String, snippet: String?) : ClusterItem {
 

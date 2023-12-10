@@ -1,14 +1,14 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
@@ -51,14 +51,15 @@ class TreeFragment : Fragment() {
         val btnMap = view.findViewById<FloatingActionButton>(R.id.f_tree_btn_map)
         btnMap.setOnClickListener{
             if(tree.latitude == 0.0 && tree.longitude == 0.0)
-                Toast.makeText(context, "Impossible to show on map : latitude and longitude undefined", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,
+                    getString(R.string.TreeFragment_impossibleMap), Toast.LENGTH_SHORT).show()
             else (activity as MainActivity).teleportToPosition(LatLng(tree.latitude, tree.longitude))
         }
 
         // Handle button edit
         val btnEdit = view.findViewById<FloatingActionButton>(R.id.f_tree_btn_edit)
         btnEdit.setOnClickListener{
-            Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.not_implemented), Toast.LENGTH_SHORT).show()
         }
 
         // Handle general texts
@@ -67,14 +68,14 @@ class TreeFragment : Fragment() {
             if(tree.commonName.isNullOrBlank()) ""
             else tree.commonName
         view.findViewById<TextView>(R.id.f_tree_text_height).text =
-            if(tree.height > 0) "Height: ${tree.height} meters"
-            else "Unknown height"
+            if(tree.height > 0) getString(R.string.TreeFragment_height, tree.height.toString())
+            else getString(R.string.TreeFragment_unknown_height)
         view.findViewById<TextView>(R.id.f_tree_text_age).text =
-            if(tree.plantationYear > 0) "Age: ${2023 - tree.plantationYear} years old (${tree.plantationYear})"
-            else "Unknown age"
+            if(tree.plantationYear > 0) getString(R.string.TreeFragment_age, (2023 - tree.plantationYear).toString(), tree.plantationYear.toString())
+            else getString(R.string.TreeFragment_unknown_age)
         view.findViewById<TextView>(R.id.f_tree_text_circumference).text =
-            if(tree.circumference > 0) "Circumference: ${tree.circumference} centimeters"
-            else "Unknown circumference"
+            if(tree.circumference > 0) getString(R.string.TreeFragment_circumference, tree.circumference.toString())
+            else getString(R.string.TreeFragment_unknown_circumference)
 
         // Handle description
         if(tree.description.isNullOrBlank()) {
@@ -87,24 +88,24 @@ class TreeFragment : Fragment() {
         var displaySeparator = false
         if(tree.botanicName.isNullOrBlank()) view.findViewById<TextView>(R.id.f_tree_text_botanic_name).visibility = View.GONE
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_botanic_name).text = "Botanic name: ${tree.botanicName}"
+            view.findViewById<TextView>(R.id.f_tree_text_botanic_name).text = getString(R.string.TreeFragment_botanic_name, tree.botanicName)
             displaySeparator = true
         }
         if(tree.type.isNullOrBlank()) view.findViewById<TextView>(R.id.f_tree_text_type).visibility = View.GONE
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_type).text = "Type: ${tree.type}"
+            view.findViewById<TextView>(R.id.f_tree_text_type).text = getString(R.string.TreeFragment_type, tree.type)
             displaySeparator = true
         }
 
         if(tree.species.isNullOrBlank()) view.findViewById<TextView>(R.id.f_tree_text_species).visibility = View.GONE
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_species).text ="Species: ${tree.species}"
+            view.findViewById<TextView>(R.id.f_tree_text_species).text = getString(R.string.TreeFragment_species, tree.species)
             displaySeparator = true
         }
 
         if(tree.variety.isNullOrBlank()) view.findViewById<TextView>(R.id.f_tree_text_variety).visibility = View.GONE
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_variety).text = "Variety: ${tree.variety}"
+            view.findViewById<TextView>(R.id.f_tree_text_variety).text = getString(R.string.TreeFragment_variety, tree.variety)
             displaySeparator = true
         }
         if(!displaySeparator) view.findViewById<View>(R.id.f_tree_divider2).visibility = View.GONE
@@ -112,7 +113,7 @@ class TreeFragment : Fragment() {
         // Handle position
         if(tree.address.isNullOrBlank()) view.findViewById<TextView>(R.id.f_tree_text_address).visibility = View.GONE
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_address).text = "Address: ${tree.address}"
+            view.findViewById<TextView>(R.id.f_tree_text_address).text = getString(R.string.TreeFragment_address, tree.address)
             view.findViewById<View>(R.id.f_tree_divider3).visibility = View.VISIBLE
         }
         if(tree.latitude == 0.0 && tree.longitude == 0.0) {
@@ -120,8 +121,8 @@ class TreeFragment : Fragment() {
             view.findViewById<TextView>(R.id.f_tree_text_longitude).visibility = View.GONE
         }
         else {
-            view.findViewById<TextView>(R.id.f_tree_text_latitude).text = "Latitude: ${tree.latitude}"
-            view.findViewById<TextView>(R.id.f_tree_text_longitude).text = "Longitude: ${tree.longitude}"
+            view.findViewById<TextView>(R.id.f_tree_text_latitude).text = getString(R.string.TreeFragment_latitude, tree.latitude.toString())
+            view.findViewById<TextView>(R.id.f_tree_text_longitude).text = getString(R.string.TreeFragment_longitude, tree.longitude.toString())
             view.findViewById<View>(R.id.f_tree_divider3).visibility = View.VISIBLE
         }
 

@@ -1,14 +1,18 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ismin.treewonder.MainActivity
+import com.ismin.treewonder.OnTreeClickListener
+import com.ismin.treewonder.R
+import com.ismin.treewonder.Tree
+import com.ismin.treewonder.TreeAdapter
 
 private const val ARG_TREES = "param1"
 private const val ARG_FAVORITES = "param2"

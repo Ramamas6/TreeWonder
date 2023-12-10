@@ -1,34 +1,17 @@
-package com.example.treewonder
+package com.ismin.treewonder
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.constraintlayout.motion.widget.Debug.getLocation
-import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import androidx.fragment.app.Fragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
-import com.squareup.picasso.Picasso
-import java.util.concurrent.Executors
 
 
 class MapsFragment : Fragment() {
@@ -39,6 +22,7 @@ class MapsFragment : Fragment() {
     private var treeInit = false
     private var initialPosition: LatLng? = null
 
+    @SuppressLint("PotentialBehaviorOverride")
     private val callback = OnMapReadyCallback { map ->
         googleMap = map
         // Setup clusterManager
@@ -50,7 +34,7 @@ class MapsFragment : Fragment() {
         // Add markers
         if(treeInit) {
             // tree data from API was ready before: we have to add them now
-            var trees = (activity as MainActivity).getTrees()
+            val trees = (activity as MainActivity).getTrees()
             trees.forEach { value -> addLandMark(value)}
         }
 
@@ -66,7 +50,7 @@ class MapsFragment : Fragment() {
 
 
     private fun addLandMark(tree: Tree) {
-        if(tree.latitude != null && tree.longitude != null) {
+        if(tree.latitude != 0.0 && tree.longitude != 0.0) {
             val newLandMark = LandMark(tree.latitude, tree.longitude, tree.name, tree.outstandingQualification)
             clusterManager.addItem(newLandMark)
         }

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.treewonder"
+    namespace = "com.ismin.treewonder"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.treewonder"
+        applicationId = "com.ismin.treewonder"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
